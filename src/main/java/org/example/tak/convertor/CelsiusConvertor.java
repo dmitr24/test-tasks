@@ -9,6 +9,8 @@ public class CelsiusConvertor implements Convertor{
                 return convertFromKelvins(convertable);
             case "F":
                 return convertFromFahrenheit(convertable);
+            case "C":
+                return convertable;
         }
 
         return null;

@@ -1,7 +1,6 @@
 package org.example.tak;
 
 
-import java.util.Arrays;
 import java.util.Objects;
 
 public class StringUtils {
@@ -41,7 +40,6 @@ public class StringUtils {
         return true;
     }
 
-    /// todo
     public static String alphabetize(String str) {
         if (Objects.isNull(str)) {
             return null;
@@ -50,8 +48,25 @@ public class StringUtils {
 
         char[] chars = str.toCharArray();
 
+        for (int i = 0; i < chars.length - 1; i++) {
+            for (int j = 0; j < chars.length - i - 1; j++) {
+                char tempI = chars[j];
+                char tempJ = chars[j + 1];
+                if (chars[i] > 97 ) {
+                    tempI = (char) (tempI - 32);
+                }
 
+                if (chars[i] > 97 ) {
+                    tempJ = (char) (tempI - 32);
+                }
 
+                if (tempI > tempJ) {
+                    char temp = chars[j];
+                    chars[j] = chars[j + 1];
+                    chars[j + 1] = temp;
+                }
+            }
+        }
         return String.copyValueOf(chars);
     }
 }

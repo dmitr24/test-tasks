@@ -30,7 +30,7 @@ public class StringUtilsTests {
             String firstLetterUpperCase = capitalizedWord.split("")[0];
             firstLetterUpperCase =firstLetterUpperCase.toUpperCase();
 
-            Assertions.assertEquals(capitalizedWord.split("")[0], firstLetterUpperCase);
+            Assertions.assertEquals(firstLetterUpperCase, capitalizedWord.split("")[0]);
         }
 
         @DisplayName("Null word capitalizes to null")
@@ -50,7 +50,7 @@ public class StringUtilsTests {
 
             emptyWord = StringUtils.capitalize(emptyWord);
 
-            Assertions.assertEquals(emptyWord, "");
+            Assertions.assertEquals("", emptyWord);
         }
 
         @DisplayName("Word with special or numeric first letter doesn't change")
@@ -171,7 +171,7 @@ public class StringUtilsTests {
         public void emptyAlphabetizeTest(String str) {
             str = StringUtils.alphabetize(str);
 
-            Assertions.assertEquals(str, "");
+            Assertions.assertEquals("", str);
         }
 
         @DisplayName("Alphabetize regular word returns correct answer")
@@ -180,10 +180,9 @@ public class StringUtilsTests {
         public void defaultStringvTest(String str) {
             str = StringUtils.alphabetize(str);
 
-
             System.out.println(str);
 
-            Assertions.assertEquals(str, "AaabCckl");
+            Assertions.assertEquals("aaACbckl", str);
         }
     }
 }

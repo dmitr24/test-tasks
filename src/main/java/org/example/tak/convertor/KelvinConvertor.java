@@ -3,12 +3,15 @@ package org.example.tak.convertor;
 public class KelvinConvertor implements Convertor{
     @Override
     public String convert(String convertable) {
+
         String from = convertable.split("")[convertable.length() - 1];
         switch (from) {
             case "C":
                 return convertFromCelsius(convertable);
             case "F":
                 return convertFromFahrenheit(convertable);
+            case "K":
+                return convertable;
         }
 
         return null;
