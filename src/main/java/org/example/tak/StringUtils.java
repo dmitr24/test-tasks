@@ -47,26 +47,29 @@ public class StringUtils {
         str = str.replaceAll("[^A-Za-z]", "");
 
         char[] chars = str.toCharArray();
+        int size = chars.length;
 
-        for (int i = 0; i < chars.length - 1; i++) {
-            for (int j = 0; j < chars.length - i - 1; j++) {
-                char tempI = chars[j];
-                char tempJ = chars[j + 1];
-                if (chars[i] > 97 ) {
-                    tempI = (char) (tempI - 32);
+        for (int i = 0; i < size - 1; i++) {
+            for (int j = 0; j < size - i - 1; j++) {
+                char left = chars[j];
+                char right = chars[j + 1];
+
+                if ((int) left < 97) {
+                    left += 32;
                 }
 
-                if (chars[i] > 97 ) {
-                    tempJ = (char) (tempI - 32);
+                if ((int) right < 97) {
+                    right += 32;
                 }
 
-                if (tempI > tempJ) {
+                if (left > right) {
                     char temp = chars[j];
                     chars[j] = chars[j + 1];
                     chars[j + 1] = temp;
                 }
             }
         }
+
         return String.copyValueOf(chars);
     }
 }

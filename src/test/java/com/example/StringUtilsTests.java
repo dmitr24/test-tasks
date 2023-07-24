@@ -182,7 +182,7 @@ public class StringUtilsTests {
 
             System.out.println(str);
 
-            Assertions.assertEquals("aaACbckl", str);
+            Assertions.assertEquals("aaAbcCkl", str);
         }
     }
 }
