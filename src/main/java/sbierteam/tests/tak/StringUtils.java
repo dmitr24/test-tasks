@@ -39,13 +39,13 @@ public class StringUtils {
          List<String> chars =  str.chars()
                  .filter(StringUtils::isLetter)
                  .boxed()
-                 .sorted(StringUtils::compare)
+                 .sorted(StringUtils::compareLetters)
                  .map(StringUtils::fromInteger)
                  .collect(Collectors.toList());
         return String.join("", chars);
     }
 
-    private static int compare(int left, int right) {
+    private static int compareLetters(int left, int right) {
         if (left < 97) {
             left += 32;
         }
