@@ -1,6 +1,6 @@
 package siberteam.tests;
 
-import sbierteam.tests.tak.StringUtils;
+import sbierteam.tests.task.StringUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;

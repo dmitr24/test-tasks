@@ -1,15 +1,15 @@
-package sbierteam.tests.tak.convertor;
+package sbierteam.tests.task.convertor;
 
-public class FahrenheitConvertor implements Convertor {
+public class KelvinConvertor implements Convertor {
     @Override
     public String convert(String convertable) {
         String from = convertable.split("")[convertable.length() - 1];
         switch (from) {
             case "C":
                 return convertFromCelsius(convertable);
-            case "K":
-                return convertFromKelvins(convertable);
             case "F":
+                return convertFromFahrenheit(convertable);
+            case "K":
                 return convertable;
             default:
                 return null;
@@ -18,13 +18,12 @@ public class FahrenheitConvertor implements Convertor {
 
     private String convertFromCelsius(String str) {
         int celsiusValue = Integer.parseInt(str.replace("C", ""));
-        float k = (float) 9 / 5;
-        return (int) (celsiusValue * k + 32) + "F";
+        return (int) (celsiusValue + 273.15) + "K";
     }
 
-    private String convertFromKelvins(String str) {
-        int kelvinValue = Integer.parseInt(str.replace("K", ""));
-        float k = (float) 9 / 5;
-        return (int) ((kelvinValue - 273.15) * k + 32) + "F";
+    private String convertFromFahrenheit(String str) {
+        int fahrenheitValue = Integer.parseInt(str.replace("F", ""));
+        float k = (float) 5 / 9;
+        return (int) ((fahrenheitValue - 32) * k + 273.15) + "K";
     }
 }

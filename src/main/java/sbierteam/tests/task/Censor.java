@@ -1,4 +1,4 @@
-package sbierteam.tests.tak;
+package sbierteam.tests.task;
 
 import sbierteam.tests.exception.NullCensoredTextProvidedException;
 import java.util.Objects;

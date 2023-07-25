@@ -1,4 +1,4 @@
-package sbierteam.tests.tak.convertor;
+package sbierteam.tests.task.convertor;
 
 public class CelsiusConvertor implements Convertor {
     @Override

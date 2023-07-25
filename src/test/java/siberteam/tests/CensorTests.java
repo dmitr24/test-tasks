@@ -1,7 +1,7 @@
 package siberteam.tests;
 
 import org.junit.jupiter.api.BeforeAll;
-import sbierteam.tests.tak.Censor;
+import sbierteam.tests.task.Censor;
 import sbierteam.tests.exception.NullCensoredTextProvidedException;
 import org.junit.Test;
 import org.junit.jupiter.api.Assertions;

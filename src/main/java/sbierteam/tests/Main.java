@@ -1,9 +1,9 @@
 package sbierteam.tests;
 
-import sbierteam.tests.tak.convertor.CelsiusConvertor;
-import sbierteam.tests.tak.convertor.Convertor;
-import sbierteam.tests.tak.convertor.FahrenheitConvertor;
-import sbierteam.tests.tak.convertor.KelvinConvertor;
+import sbierteam.tests.task.convertor.CelsiusConvertor;
+import sbierteam.tests.task.convertor.Convertor;
+import sbierteam.tests.task.convertor.FahrenheitConvertor;
+import sbierteam.tests.task.convertor.KelvinConvertor;
 import java.util.Scanner;
 
 public class Main {

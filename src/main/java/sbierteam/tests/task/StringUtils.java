@@ -1,4 +1,4 @@
-package sbierteam.tests.tak;
+package sbierteam.tests.task;
 
 import java.util.List;
 import java.util.Objects;

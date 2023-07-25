@@ -1,4 +1,4 @@
-package sbierteam.tests.tak;
+package sbierteam.tests.task;
 
 public class Fraction implements Comparable<Fraction> {
     final int nominator;

@@ -1,7 +1,7 @@
 package siberteam.tests;
 
 import org.junit.jupiter.api.Test;
-import sbierteam.tests.tak.Fraction;
+import sbierteam.tests.task.Fraction;
 import org.junit.jupiter.api.Assertions;
 
 public class FractionTests {
