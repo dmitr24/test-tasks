@@ -10,14 +10,11 @@ public class Main {
     public static void main(String[] args) {
         System.out.println("Пожалуйста, введите строку типа 400K F");
         Scanner scanner = new Scanner(System.in);
-
         String line = scanner.nextLine();
-
         String value = line.split(" ")[0];
         String scale = line.split(" ")[1];
-
-        Convertor convertor;
         String result;
+        Convertor convertor;
 
         switch (scale) {
             case "K":
@@ -35,7 +32,6 @@ public class Main {
             default:
                 result = "Wrong scale specified";
         }
-
         System.out.println(result);
     }
 }
