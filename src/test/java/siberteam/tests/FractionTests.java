@@ -1,14 +1,12 @@
-package com.example;
+package siberteam.tests;
 
-import org.example.tak.Fraction;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
+import sbierteam.tests.tak.Fraction;
 import org.junit.jupiter.api.Assertions;
 
-
 public class FractionTests {
-
     @Test
-    public void addOtherFractionTest() {
+    void addOtherFractionTest() {
         Fraction firstFraction = new Fraction(1, 8);
         Fraction secondFraction = new Fraction(4, 5);
 
@@ -18,7 +16,7 @@ public class FractionTests {
     }
 
     @Test
-    public void subtractOtherFractionTest() {
+    void subtractOtherFractionTest() {
         Fraction firstFraction = new Fraction(3, 5);
         Fraction secondFraction = new Fraction(4, 5);
 
@@ -28,7 +26,7 @@ public class FractionTests {
     }
 
     @Test
-    public void multiplyOtherFractionTest() {
+    void multiplyOtherFractionTest() {
         Fraction firstFraction = new Fraction(1, 8);
         Fraction secondFraction = new Fraction(4, 5);
 
@@ -38,7 +36,7 @@ public class FractionTests {
     }
 
     @Test
-    public void divideOtherFractionTest() {
+    void divideOtherFractionTest() {
         Fraction firstFraction = new Fraction(1, 8);
         Fraction secondFraction = new Fraction(4, 5);
 
@@ -47,9 +45,8 @@ public class FractionTests {
         Assertions.assertEquals("5/32", resultFraction.toString());
     }
 
-
     @Test
-    public void defaultEqualsTest() {
+    void defaultEqualsTest() {
         Fraction firstFraction = new Fraction(1, 4);
         Fraction secondFraction = new Fraction(1, 4);
 
@@ -57,7 +54,7 @@ public class FractionTests {
     }
 
     @Test
-    public void notEqualsTest() {
+    void notEqualsTest() {
         Fraction firstFraction = new Fraction(1, 8);
         Fraction secondFraction = new Fraction(2, 4);
 
@@ -65,7 +62,7 @@ public class FractionTests {
     }
 
     @Test
-    public void equalsWithDifferentSignaturesTest() {
+    void equalsWithDifferentSignaturesTest() {
         Fraction firstFraction = new Fraction(1, 8);
         Fraction secondFraction = new Fraction(2, 16);
 
@@ -73,10 +70,9 @@ public class FractionTests {
     }
 
     @Test
-    public void compareSmallWithBigTest() {
+    void compareSmallWithBigTest() {
         Fraction firstFraction = new Fraction(4, 8);
         Fraction secondFraction = new Fraction(2, 16);
-
 
         int firstComparedToSecond = firstFraction.compareTo(secondFraction);
 
@@ -84,10 +80,9 @@ public class FractionTests {
     }
 
     @Test
-    public void compareEqualValuesTest() {
+    void compareEqualValuesTest() {
         Fraction firstFraction = new Fraction(1, 8);
         Fraction secondFraction = new Fraction(2, 16);
-
 
         int firstComparedToSecond = firstFraction.compareTo(secondFraction);
 
@@ -95,10 +90,9 @@ public class FractionTests {
     }
 
     @Test
-    public void compareBigWithSmallValueTest() {
+    void compareBigWithSmallValueTest() {
         Fraction firstFraction = new Fraction(1, 8);
         Fraction secondFraction = new Fraction(22, 16);
-
 
         int firstComparedToSecond = firstFraction.compareTo(secondFraction);
 
@@ -106,7 +100,7 @@ public class FractionTests {
     }
 
     @Test
-    public void getFractionFromStringTest() {
+    void getFractionFromStringTest() {
         Fraction fraction = Fraction.fromString("37/40");
 
         Assertions.assertEquals("37/40", fraction.toString());

@@ -1,10 +1,9 @@
-package org.example;
+package sbierteam.tests;
 
-import org.example.tak.convertor.CelsiusConvertor;
-import org.example.tak.convertor.Convertor;
-import org.example.tak.convertor.FahrenheitConvertor;
-import org.example.tak.convertor.KelvinConvertor;
-
+import sbierteam.tests.tak.convertor.CelsiusConvertor;
+import sbierteam.tests.tak.convertor.Convertor;
+import sbierteam.tests.tak.convertor.FahrenheitConvertor;
+import sbierteam.tests.tak.convertor.KelvinConvertor;
 import java.util.Scanner;
 
 public class Main {
@@ -18,7 +17,7 @@ public class Main {
         String scale = line.split(" ")[1];
 
         Convertor convertor;
-        String result = "";
+        String result;
 
         switch (scale) {
             case "K":
@@ -33,6 +32,8 @@ public class Main {
                 convertor = new CelsiusConvertor();
                 result = convertor.convert(value);
                 break;
+            default:
+                result = "Wrong scale specified";
         }
 
         System.out.println(result);

@@ -1,8 +1,6 @@
-package org.example.tak;
+package sbierteam.tests.tak;
 
-
-import org.example.exception.NullCensoredTextProvidedException;
-
+import sbierteam.tests.exception.NullCensoredTextProvidedException;
 import java.util.Objects;
 
 public class Censor {

@@ -1,9 +1,8 @@
-package org.example.tak.convertor;
+package sbierteam.tests.tak.convertor;
 
-public class KelvinConvertor implements Convertor{
+public class KelvinConvertor implements Convertor {
     @Override
     public String convert(String convertable) {
-
         String from = convertable.split("")[convertable.length() - 1];
         switch (from) {
             case "C":
@@ -12,15 +11,14 @@ public class KelvinConvertor implements Convertor{
                 return convertFromFahrenheit(convertable);
             case "K":
                 return convertable;
+            default:
+                return null;
         }
-
-        return null;
     }
 
     private String convertFromCelsius(String str) {
         int celsiusValue = Integer.parseInt(str.replace("C", ""));
-
-        return (int)  (celsiusValue + 273.15) + "K";
+        return (int) (celsiusValue + 273.15) + "K";
     }
 
     private String convertFromFahrenheit(String str) {

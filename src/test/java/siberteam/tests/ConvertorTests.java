@@ -1,19 +1,18 @@
-package com.example;
+package siberteam.tests;
 
-import org.example.tak.convertor.CelsiusConvertor;
-import org.example.tak.convertor.Convertor;
-import org.example.tak.convertor.FahrenheitConvertor;
-import org.example.tak.convertor.KelvinConvertor;
+import sbierteam.tests.tak.convertor.CelsiusConvertor;
+import sbierteam.tests.tak.convertor.Convertor;
+import sbierteam.tests.tak.convertor.FahrenheitConvertor;
+import sbierteam.tests.tak.convertor.KelvinConvertor;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 public class ConvertorTests {
-
     @Nested
-    public class KelvinConvertorTests {
+    class KelvinConvertorTests {
         @Test
-        public void convertFromCelsiusTest() {
+        void convertFromCelsiusTest() {
             Convertor convertor = new KelvinConvertor();
             String temperature = "26C";
 
@@ -23,7 +22,7 @@ public class ConvertorTests {
         }
 
         @Test
-        public void convertFromFohrengeitTest() {
+        void convertFromFahrenheitTest() {
             Convertor convertor = new KelvinConvertor();
             String temperature = "26F";
 
@@ -34,9 +33,9 @@ public class ConvertorTests {
     }
 
     @Nested
-    public class CelsiusConvertorTests {
+    class CelsiusConvertorTests {
         @Test
-        public void convertFromKelvinTest() {
+        void convertFromKelvinTest() {
             Convertor convertor = new CelsiusConvertor();
             String temperature = "293K";
 
@@ -46,7 +45,7 @@ public class ConvertorTests {
         }
 
         @Test
-        public void convertFromFahrenheitTest() {
+        void convertFromFahrenheitTest() {
             Convertor convertor = new CelsiusConvertor();
             String temperature = "26F";
 
@@ -57,9 +56,9 @@ public class ConvertorTests {
     }
 
     @Nested
-    public class FahrenheitConvertorTests {
+    class FahrenheitConvertorTests {
         @Test
-        public void convertFromKelvinTest() {
+        void convertFromKelvinTest() {
             Convertor convertor = new FahrenheitConvertor();
             String temperature = "293K";
 
@@ -69,7 +68,7 @@ public class ConvertorTests {
         }
 
         @Test
-        public void convertFromCelsiusTest() {
+        void convertFromCelsiusTest() {
             Convertor convertor = new FahrenheitConvertor();
             String temperature = "26C";
 

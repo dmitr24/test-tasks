@@ -1,6 +1,6 @@
-package org.example.tak;
+package sbierteam.tests.tak;
 
-public class Fraction implements Comparable {
+public class Fraction implements Comparable<Fraction> {
     final int nominator;
     final int denominator;
 
@@ -13,8 +13,6 @@ public class Fraction implements Comparable {
         int lcm = lcm(this.denominator, otherFraction.denominator);
         int a = getComparableNominator(this, lcm);
         int b = getComparableNominator(otherFraction, lcm);
-
-
         return new Fraction(a + b, lcm);
     }
 
@@ -22,8 +20,6 @@ public class Fraction implements Comparable {
         int lcm = lcm(this.denominator, otherFraction.denominator);
         int a = getComparableNominator(this, lcm);
         int b = getComparableNominator(otherFraction, lcm);
-
-
         return new Fraction(a - b, lcm);
     }
 
@@ -37,29 +33,24 @@ public class Fraction implements Comparable {
                 this.denominator * otherFraction.nominator);
     }
 
+    @Override
+    public int hashCode() {
+        return nominator * 31 + denominator;
+    }
 
     @Override
     public boolean equals(Object obj) {
         if (obj == null) {
             return false;
         }
-
         if (!(obj instanceof Fraction)) {
             return false;
         }
-
         Fraction otherFraction = (Fraction) obj;
-
         int lcm = lcm(this.denominator, otherFraction.denominator);
-
         int a = getComparableNominator(this, lcm);
         int b = getComparableNominator(otherFraction, lcm);
-
-       if (a != b) {
-           return false;
-       }
-
-        return true;
+        return a == b;
     }
 
     @Override
@@ -68,31 +59,19 @@ public class Fraction implements Comparable {
     }
 
     @Override
-    public int compareTo(Object obj) {
-        if (obj == null) {
+    public int compareTo(Fraction otherFraction) {
+        if (otherFraction == null) {
             throw new NullPointerException("Comparing to null is impossible");
         }
-
-        Fraction otherFraction = (Fraction) obj;
-
         int lcm = lcm(this.denominator, otherFraction.denominator);
-
         int a = getComparableNominator(this, lcm);
         int b = getComparableNominator(otherFraction, lcm);
-
-        if (a < b) {
-            return -1;
-        } else if (a > b) {
-            return 1;
-        } else {
-            return 0;
-        }
+        return Integer.compare(a, b);
     }
 
     private int getComparableNominator(Fraction fraction, int lcm) {
-        int timesBiiger = lcm / fraction.denominator;
-
-        return fraction.nominator * timesBiiger;
+        int multiplier = lcm / fraction.denominator;
+        return fraction.nominator * multiplier;
     }
 
     private int lcm(int a, int b) {
@@ -105,20 +84,17 @@ public class Fraction implements Comparable {
            a = b;
            b = c;
         }
-
         while (b > 0) {
             a %= b;
             int c = a;
             a = b;
             b = c;
         }
-
         return a;
     }
 
     public static Fraction fromString(String str) {
         String[] strings = str.split("/");
-
         return new Fraction(Integer.parseInt(strings[0]), Integer.parseInt(strings[1]));
     }
 }

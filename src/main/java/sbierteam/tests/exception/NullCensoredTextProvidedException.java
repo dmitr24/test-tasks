@@ -1,4 +1,4 @@
-package org.example.exception;
+package sbierteam.tests.exception;
 
 public class NullCensoredTextProvidedException extends RuntimeException {
     public NullCensoredTextProvidedException(String message) {

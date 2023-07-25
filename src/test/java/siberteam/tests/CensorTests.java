@@ -1,7 +1,8 @@
-package com.example;
+package siberteam.tests;
 
-import org.example.tak.Censor;
-import org.example.exception.NullCensoredTextProvidedException;
+import org.junit.jupiter.api.BeforeAll;
+import sbierteam.tests.tak.Censor;
+import sbierteam.tests.exception.NullCensoredTextProvidedException;
 import org.junit.Test;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
@@ -9,11 +10,16 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.EmptySource;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.params.provider.NullSource;
-
 import java.util.ArrayList;
 import java.util.List;
 
 public class CensorTests {
+    private static Censor censor;
+
+    @BeforeAll
+    static void initCensor() {
+        censor = new Censor("randomWord");
+    }
 
     @Test
     @DisplayName("Null censurable word test")
@@ -25,9 +31,7 @@ public class CensorTests {
     @DisplayName("Null text")
     @ParameterizedTest
     @NullSource
-    public void nullTextProvidedTest(String text) {
-        Censor censor =  new Censor("randomword");
-
+    void nullTextProvidedTest(String text) {
         Assertions.assertDoesNotThrow(() -> censor.apply(text));
     }
 
@@ -35,26 +39,24 @@ public class CensorTests {
     @ParameterizedTest
     @EmptySource
     @MethodSource("randomWordFactory")
-    public void deletingCensurableWordTest(String text) {
-        Censor censor =  new Censor("randomword");
-
+    void deletingCensurableWordTest(String text) {
         String censoredText = censor.apply(text);
 
-        Assertions.assertFalse(censoredText.contains("randomword"));
+        Assertions.assertFalse(censoredText.contains("randomWord"));
     }
 
     @DisplayName("Replacing censurable word with censored")
     @ParameterizedTest
     @MethodSource("uncensoredStringFactory")
-    public void censoringTextTest(String text) {
-        Censor censor =  new Censor("randomword");
+    void censoringTextTest(String text) {
 
         String censoredText = censor.apply(text);
 
-        Assertions.assertFalse(censoredText.contains("randomword"));
+        Assertions.assertFalse(censoredText.contains("randomWord"));
         Assertions.assertTrue(censoredText.contains("censored"));
     }
 
+    @SuppressWarnings("SpellCheckingInspection")
     public static List<String> randomWordFactory() {
         List<String> texts = new ArrayList<>();
         texts.add("randomwordrondomStrongrandomword4random4wordrandom44word");
@@ -64,12 +66,13 @@ public class CensorTests {
         return texts;
     }
 
+    @SuppressWarnings("SpellCheckingInspection")
     public static List<String> uncensoredStringFactory() {
         List<String> texts = new ArrayList<>();
-        texts.add("randomwordrondomStrongrrandomwordandomwrandomwordord4random4wordrandom44word");
-        texts.add("randomwordrondrandomwordomStrongrarandomwordndomword4rawordwordrandom");
-        texts.add("randomWrandomwordord");
-        texts.add("randrandomwordomword");
+        texts.add("randrandomWordomworandomWordrdrondomStrongrrandomwordandomwrandomwordord4random4wordrandom44word");
+        texts.add("randomwrandomWordordrondrandrandomWordomwordomStrongrarandomwordndomword4rawordwordrandom");
+        texts.add("randomWrandomwrandomWordordord");
+        texts.add("randrrandomWordandomwordomword");
         return texts;
     }
 }
