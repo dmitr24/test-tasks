@@ -1,10 +1,17 @@
 package siberteam.tests;
 
 import org.junit.jupiter.api.Test;
+import sbierteam.tests.exception.ForbiddenDenominatorException;
 import sbierteam.tests.task.Fraction;
 import org.junit.jupiter.api.Assertions;
 
 public class FractionTests {
+    @Test
+    void zeroDenominatorThrowsExceptionTest() {
+        Assertions.assertThrows(ForbiddenDenominatorException.class,
+                () -> new Fraction(1, 0));
+    }
+
     @Test
     void addOtherFractionTest() {
         Fraction firstFraction = new Fraction(1, 8);

@@ -1,10 +1,7 @@
 package siberteam.tests;
 
+import org.junit.jupiter.api.*;
 import sbierteam.tests.task.StringUtils;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Nested;
-import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.*;
 import java.util.ArrayList;
@@ -79,7 +76,7 @@ public class StringUtilsTests {
     class PalindromeTests {
         @DisplayName("Single letter is a palindrome")
         @ParameterizedTest
-        @ValueSource(strings = "a")
+        @ValueSource(strings = {"a", "b", "z", "c"})
         void singleLetterWordTest(String string) {
             boolean result = StringUtils.isPalindrome(string);
 
@@ -159,12 +156,13 @@ public class StringUtilsTests {
         }
 
         @DisplayName("Alphabetize regular word returns correct answer")
-        @ParameterizedTest
-        @ValueSource(strings = "bacCaA(8$#@klbB)")
-        void defaultStringTest(String str) {
+        @Test
+        void defaultStringTest() {
+            String str = "bacCaA(8$#@klbB)Zz";
+
             str = StringUtils.alphabetize(str);
 
-            Assertions.assertEquals("aaAbbBcCkl", str);
+            Assertions.assertEquals("aaAbbBcCklZz", str);
         }
     }
 }

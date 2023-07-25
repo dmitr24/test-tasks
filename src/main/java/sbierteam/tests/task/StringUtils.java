@@ -5,6 +5,8 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class StringUtils {
+    private static final int LETTER_CASE_DISTANCE = 32;
+
     private StringUtils() {}
 
     public static String capitalize(String str) {
@@ -47,17 +49,17 @@ public class StringUtils {
 
     private static int compareLetters(int left, int right) {
         if (left < 97) {
-            left += 32;
+            left += LETTER_CASE_DISTANCE;
         }
         if (right < 97) {
-            right += 32;
+            right += LETTER_CASE_DISTANCE;
         }
         return Integer.compare(left, right);
     }
 
     private static boolean isLetter(int character) {
-        if ((96 < character && character < 123) ||
-                (64 < character && character < 91)) {
+        if (('a' <= character && character <= 'z') ||
+                ('A' <= character && character <= 'Z')) {
             return true;
         } else {
             return false;

@@ -1,29 +1,20 @@
 package sbierteam.tests.task.convertor;
 
-public class KelvinConvertor implements Convertor {
-    @Override
-    public String convert(String convertable) {
-        String from = convertable.split("")[convertable.length() - 1];
-        switch (from) {
-            case "C":
-                return convertFromCelsius(convertable);
-            case "F":
-                return convertFromFahrenheit(convertable);
-            case "K":
-                return convertable;
-            default:
-                return null;
-        }
+import sbierteam.tests.task.convertor.data.CelsiusTemperature;
+import sbierteam.tests.task.convertor.data.FahrenheitTemperature;
+import sbierteam.tests.task.convertor.data.KelvinTemperature;
+
+public class KelvinConvertor {
+    private KelvinConvertor() {}
+
+    public static KelvinTemperature convert(CelsiusTemperature celsiusTemperature) {
+        int tempValue =  (int) (celsiusTemperature.getValue() + 273.15);
+        return new KelvinTemperature(tempValue);
     }
 
-    private String convertFromCelsius(String str) {
-        int celsiusValue = Integer.parseInt(str.replace("C", ""));
-        return (int) (celsiusValue + 273.15) + "K";
-    }
-
-    private String convertFromFahrenheit(String str) {
-        int fahrenheitValue = Integer.parseInt(str.replace("F", ""));
+    public static KelvinTemperature convert(FahrenheitTemperature fahrenheitTemperature) {
         float k = (float) 5 / 9;
-        return (int) ((fahrenheitValue - 32) * k + 273.15) + "K";
+        int tempValue = (int) ((fahrenheitTemperature.getValue() - 32) * k + 273.15);
+        return new KelvinTemperature(tempValue);
     }
 }

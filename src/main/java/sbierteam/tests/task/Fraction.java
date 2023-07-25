@@ -1,10 +1,15 @@
 package sbierteam.tests.task;
 
+import sbierteam.tests.exception.ForbiddenDenominatorException;
+
 public class Fraction implements Comparable<Fraction> {
     final int nominator;
     final int denominator;
 
     public Fraction(int nominator, int denominator) {
+        if (denominator == 0) {
+            throw new ForbiddenDenominatorException("Denominator can't be zero");
+        }
         this.nominator = nominator;
         this.denominator = denominator;
     }
@@ -35,7 +40,7 @@ public class Fraction implements Comparable<Fraction> {
 
     @Override
     public int hashCode() {
-        return nominator * 31 + denominator;
+        return nominator * 31 / denominator;
     }
 
     @Override

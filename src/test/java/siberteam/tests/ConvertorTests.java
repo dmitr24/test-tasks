@@ -1,34 +1,34 @@
 package siberteam.tests;
 
 import sbierteam.tests.task.convertor.CelsiusConvertor;
-import sbierteam.tests.task.convertor.Convertor;
 import sbierteam.tests.task.convertor.FahrenheitConvertor;
 import sbierteam.tests.task.convertor.KelvinConvertor;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import sbierteam.tests.task.convertor.data.CelsiusTemperature;
+import sbierteam.tests.task.convertor.data.FahrenheitTemperature;
+import sbierteam.tests.task.convertor.data.KelvinTemperature;
 
 public class ConvertorTests {
     @Nested
     class KelvinConvertorTests {
         @Test
         void convertFromCelsiusTest() {
-            Convertor convertor = new KelvinConvertor();
-            String temperature = "26C";
+            CelsiusTemperature temperature = new CelsiusTemperature(26);
 
-            String kelvinTemp = convertor.convert(temperature);
+            KelvinTemperature kelvinTemperature = KelvinConvertor.convert(temperature);
 
-            Assertions.assertEquals("299K", kelvinTemp);
+            Assertions.assertEquals("299K", kelvinTemperature.toString());
         }
 
         @Test
         void convertFromFahrenheitTest() {
-            Convertor convertor = new KelvinConvertor();
-            String temperature = "26F";
+            FahrenheitTemperature temperature = new FahrenheitTemperature(26);
 
-            String kelvinTemp = convertor.convert(temperature);
+            KelvinTemperature kelvinTemperature = KelvinConvertor.convert(temperature);
 
-            Assertions.assertEquals("269K", kelvinTemp);
+            Assertions.assertEquals("269K", kelvinTemperature.toString());
         }
     }
 
@@ -36,22 +36,20 @@ public class ConvertorTests {
     class CelsiusConvertorTests {
         @Test
         void convertFromKelvinTest() {
-            Convertor convertor = new CelsiusConvertor();
-            String temperature = "293K";
+            KelvinTemperature temperature = new KelvinTemperature(293);
 
-            String kelvinTemp = convertor.convert(temperature);
+            CelsiusTemperature celsiusTemperature = CelsiusConvertor.convert(temperature);
 
-            Assertions.assertEquals("19C", kelvinTemp);
+            Assertions.assertEquals("19C", celsiusTemperature.toString());
         }
 
         @Test
         void convertFromFahrenheitTest() {
-            Convertor convertor = new CelsiusConvertor();
-            String temperature = "26F";
+            FahrenheitTemperature temperature = new FahrenheitTemperature(26);
 
-            String kelvinTemp = convertor.convert(temperature);
+            CelsiusTemperature celsiusTemperature = CelsiusConvertor.convert(temperature);
 
-            Assertions.assertEquals("-3C", kelvinTemp);
+            Assertions.assertEquals("-3C", celsiusTemperature.toString());
         }
     }
 
@@ -59,22 +57,20 @@ public class ConvertorTests {
     class FahrenheitConvertorTests {
         @Test
         void convertFromKelvinTest() {
-            Convertor convertor = new FahrenheitConvertor();
-            String temperature = "293K";
+            KelvinTemperature temperature = new KelvinTemperature(293);
 
-            String kelvinTemp = convertor.convert(temperature);
+            FahrenheitTemperature fahrenheitTemperature = FahrenheitConvertor.convert(temperature);
 
-            Assertions.assertEquals("67F", kelvinTemp);
+            Assertions.assertEquals("67F", fahrenheitTemperature.toString());
         }
 
         @Test
         void convertFromCelsiusTest() {
-            Convertor convertor = new FahrenheitConvertor();
-            String temperature = "26C";
+            CelsiusTemperature temperature = new CelsiusTemperature(26);
 
-            String kelvinTemp = convertor.convert(temperature);
+            FahrenheitTemperature fahrenheitTemperature = FahrenheitConvertor.convert(temperature);
 
-            Assertions.assertEquals("78F", kelvinTemp);
+            Assertions.assertEquals("78F", fahrenheitTemperature.toString());
         }
     }
 }
