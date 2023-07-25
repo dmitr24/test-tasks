@@ -2,7 +2,6 @@ package siberteam.testperiod.io.subtask.first;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
