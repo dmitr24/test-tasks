@@ -1,9 +1,9 @@
 package siberteam.tests;
 
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 import sbierteam.tests.task.Censor;
 import sbierteam.tests.exception.NullCensoredTextProvidedException;
-import org.junit.Test;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -23,7 +23,7 @@ public class CensorTests {
 
     @Test
     @DisplayName("Null censurable word test")
-    public void nullCensurableWordProvidedTest() {
+    void nullCensurableWordProvidedTest() {
         Assertions.assertThrows(NullCensoredTextProvidedException.class,
                 () -> new Censor(null));
     }
