@@ -76,6 +76,7 @@ public class Main {
                 return;
             case CELSIUS:
                 System.out.println(CelsiusConvertor.convert(fahrenheitTemperature));
+                return;
             default:
                 System.err.println("Provided target temperature scale is not supported");
                 System.exit(1);
@@ -93,6 +94,7 @@ public class Main {
                 return;
             case CELSIUS:
                 System.out.println(celsiusTemperature);
+                return;
             default:
                 System.err.println("Provided actual temperature scale is not supported");
                 System.exit(1);
