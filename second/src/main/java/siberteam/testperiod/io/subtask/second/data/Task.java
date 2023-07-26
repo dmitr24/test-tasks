@@ -7,7 +7,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-public class TaskDto {
+public class Task {
     private String fileName;
     private String sorterClasName;
 }

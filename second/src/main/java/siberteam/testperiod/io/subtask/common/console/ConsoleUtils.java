@@ -1,4 +1,4 @@
-package siberteam.testperiod.io.subtask.general.console;
+package siberteam.testperiod.io.subtask.common.console;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;

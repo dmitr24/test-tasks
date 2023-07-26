@@ -5,7 +5,7 @@ import java.util.Comparator;
 import java.util.stream.Collectors;
 
 @SuppressWarnings("unused")
-public class RepeatedLettersCountsSorter implements Sorter {
+public class UniqueLettersCountsSorter implements Sorter {
     @Override
     public String sort(String text) {
         return TextUtils

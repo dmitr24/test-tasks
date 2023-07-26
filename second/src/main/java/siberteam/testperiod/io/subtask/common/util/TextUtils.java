@@ -1,4 +1,4 @@
-package siberteam.testperiod.io.subtask.general.util;
+package siberteam.testperiod.io.subtask.common.util;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
@@ -12,5 +12,10 @@ public class TextUtils {
         return Stream.of(text.split(""))
                 .distinct()
                 .collect(Collectors.toList());
+    }
+
+    public static Stream<String> getNotEmptyWordsFromText(String text) {
+        return Stream.of(text.split("\n| "))
+                .filter(str -> str.length() > 0);
     }
 }

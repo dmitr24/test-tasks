@@ -1,2 +1,15 @@
-package siberteam.testperiod.io.subtask.second.sorter;public class AlphabetSorter {
+package siberteam.testperiod.io.subtask.second.sorter;
+
+import siberteam.testperiod.io.subtask.common.util.TextUtils;
+import java.util.stream.Collectors;
+
+@SuppressWarnings("unused")
+public class AlphabetSorter implements Sorter {
+    @Override
+    public String sort(String text) {
+        return TextUtils
+                .getNotEmptyWordsFromText(text)
+                .sorted()
+                .collect(Collectors.joining("\n"));
+    }
 }

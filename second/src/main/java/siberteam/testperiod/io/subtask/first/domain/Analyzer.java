@@ -2,7 +2,7 @@ package siberteam.testperiod.io.subtask.first.domain;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import siberteam.testperiod.io.subtask.first.util.TextUtils;
+import siberteam.testperiod.io.subtask.common.util.TextUtils;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
