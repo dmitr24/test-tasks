@@ -1,4 +1,4 @@
-package siberteam.testperiod.io.subtask.first;
+package siberteam.testperiod.io.subtask.first.io;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
@@ -14,14 +14,13 @@ import java.util.stream.Stream;
 public class Reader {
     private static final String DEFAULT_LOCATION = "/home/dmitryk/projects/main/second/src/main/resources/first/";
 
-    public static String readFromFile(String fileName) {
+    public static String readFromFile(String fileName) throws IOException {
         Path path = Paths.get(DEFAULT_LOCATION + fileName);
-        String result = null;
-        try (Stream<String> lines = Files.lines(path, StandardCharsets.UTF_8)){
+        String result;
+        try (Stream<String> lines = Files.lines(path, StandardCharsets.UTF_8)) {
             result = lines.collect(Collectors.joining());
         } catch (IOException exception) {
-            System.out.println("Unable to read this file");
-            System.exit(1);
+            throw new IOException("Unable to read the file with path " + path);
         }
         return result;
     }
