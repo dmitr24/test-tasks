@@ -4,8 +4,6 @@ import java.util.Objects;
 import java.util.stream.Collector;
 
 public class StringUtils {
-    private static final int LETTER_CASE_DISTANCE = 32;
-
     private StringUtils() {}
 
     public static String capitalize(String str) {
@@ -14,7 +12,7 @@ public class StringUtils {
         }
         char[] chars = str.toCharArray();
         if (0 < chars.length && 'a' <= chars[0] && chars[0] <= 'z') {
-            chars[0] += LETTER_CASE_DISTANCE;
+            chars[0] = Character.toUpperCase(chars[0]);
         }
         return String.copyValueOf(chars);
     }
@@ -53,10 +51,10 @@ public class StringUtils {
 
     private static int compareLetters(char left, char right) {
         if (left < 97) {
-            left += LETTER_CASE_DISTANCE;
+            left = Character.toLowerCase(left);
         }
         if (right < 97) {
-            right += LETTER_CASE_DISTANCE;
+            right = Character.toLowerCase(right);
         }
         return Character.compare(left, right);
     }

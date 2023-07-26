@@ -7,6 +7,8 @@ import siberteam.testperiod.first.task.convertor.KelvinConvertor;
 import siberteam.testperiod.first.task.convertor.data.CelsiusTemperature;
 import siberteam.testperiod.first.task.convertor.data.FahrenheitTemperature;
 import siberteam.testperiod.first.task.convertor.data.KelvinTemperature;
+
+import java.util.Objects;
 import java.util.Scanner;
 
 public class Main {
@@ -18,6 +20,10 @@ public class Main {
         TemperatureScale targetScale = TemperatureScale.valueOfLetter(line.split("=>")[1]);
         TemperatureScale actualScale =
                 TemperatureScale.valueOfLetter(temperature.split("")[temperature.length() - 1]);
+        if (Objects.isNull(actualScale)) {
+            System.err.println("Actual temperature contains unsupported scale");
+            System.exit(1);
+        }
 
         switch (actualScale) {
             case KELVIN:
@@ -52,6 +58,7 @@ public class Main {
                 return;
             case CELSIUS:
                 System.out.println(CelsiusConvertor.convert(kelvinTemperature));
+                return;
             default:
                 System.err.println("Provided target temperature scale is not supported");
                 System.exit(1);
