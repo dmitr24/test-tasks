@@ -1,9 +1,7 @@
 package siberteam.testperiod.first.task;
 
-import java.util.Arrays;
 import java.util.Objects;
 import java.util.stream.Collector;
-import java.util.stream.Collectors;
 
 public class StringUtils {
     private static final int LETTER_CASE_DISTANCE = 32;
