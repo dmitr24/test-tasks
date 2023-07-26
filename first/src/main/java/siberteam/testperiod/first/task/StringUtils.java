@@ -13,7 +13,7 @@ public class StringUtils {
             return null;
         }
         char[] chars = str.toCharArray();
-        if (0 < chars.length && 'a' < chars[0] && chars[0] < 'z') {
+        if (0 < chars.length && 'a' <= chars[0] && chars[0] <= 'z') {
             chars[0] += LETTER_CASE_DISTANCE;
         }
         return String.copyValueOf(chars);
