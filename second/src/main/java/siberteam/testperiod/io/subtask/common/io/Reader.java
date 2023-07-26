@@ -18,7 +18,7 @@ public class Reader {
         Path path = Paths.get(location + fileName);
         String result;
         try (Stream<String> lines = Files.lines(path, StandardCharsets.UTF_8)) {
-            result = lines.collect(Collectors.joining());
+            result = lines.collect(Collectors.joining("\n"));
         } catch (IOException exception) {
             throw new IOException("Unable to read the file with path " + path);
         }
