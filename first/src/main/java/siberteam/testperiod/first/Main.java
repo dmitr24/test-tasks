@@ -36,6 +36,8 @@ public class Main {
                 handleCelsius(celsiusTemperature, targetScale);
                 break;
             default:
+                System.err.println("Provided actual temperature scale is not supported");
+                System.exit(1);
         }
     }
 
@@ -51,6 +53,8 @@ public class Main {
             case CELSIUS:
                 System.out.println(CelsiusConvertor.convert(kelvinTemperature));
             default:
+                System.err.println("Provided target temperature scale is not supported");
+                System.exit(1);
         }
     }
 
@@ -66,6 +70,8 @@ public class Main {
             case CELSIUS:
                 System.out.println(CelsiusConvertor.convert(fahrenheitTemperature));
             default:
+                System.err.println("Provided target temperature scale is not supported");
+                System.exit(1);
         }
     }
 
@@ -80,6 +86,9 @@ public class Main {
                 return;
             case CELSIUS:
                 System.out.println(celsiusTemperature);
+            default:
+                System.err.println("Provided actual temperature scale is not supported");
+                System.exit(1);
         }
     }
 

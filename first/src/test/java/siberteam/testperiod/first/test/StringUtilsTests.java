@@ -55,6 +55,8 @@ public class StringUtilsTests {
         List<String> defaultStringFactory() {
             List<String> strings = new ArrayList<>();
             strings.add("vanya");
+            strings.add("anya");
+            strings.add("zoya");
             strings.add("sasha");
             strings.add("Gosha");
             return strings;
