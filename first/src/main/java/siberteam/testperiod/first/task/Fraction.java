@@ -1,7 +1,6 @@
 package siberteam.testperiod.first.task;
 
 import siberteam.testperiod.first.exception.ForbiddenDenominatorException;
-
 import java.util.Objects;
 
 public class Fraction implements Comparable<Fraction> {

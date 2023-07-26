@@ -1,7 +1,5 @@
 package siberteam.testperiod.io.subtask.common.io;
 
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -10,7 +8,6 @@ import java.nio.file.Paths;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-@NoArgsConstructor(access = AccessLevel.NONE)
 public class Reader {
     private static String location = "";
 

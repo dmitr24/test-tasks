@@ -7,7 +7,6 @@ import siberteam.testperiod.first.task.convertor.KelvinConvertor;
 import siberteam.testperiod.first.task.convertor.data.CelsiusTemperature;
 import siberteam.testperiod.first.task.convertor.data.FahrenheitTemperature;
 import siberteam.testperiod.first.task.convertor.data.KelvinTemperature;
-
 import java.util.Objects;
 import java.util.Scanner;
 

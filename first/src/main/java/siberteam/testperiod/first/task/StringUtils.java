@@ -50,10 +50,10 @@ public class StringUtils {
     }
 
     private static int compareLetters(char left, char right) {
-        if (left < 97) {
+        if (left < 'a') {
             left = Character.toLowerCase(left);
         }
-        if (right < 97) {
+        if (right < 'a') {
             right = Character.toLowerCase(right);
         }
         return Character.compare(left, right);
