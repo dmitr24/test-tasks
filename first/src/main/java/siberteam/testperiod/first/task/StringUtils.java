@@ -28,9 +28,9 @@ public class StringUtils {
         if (str.length() == 1) {
             return true;
         }
-        String[] letters = str.split("");
+        char[] letters = str.toCharArray();
         for (int i = 0; i < letters.length; i++) {
-            if (!letters[i].equals(letters[letters.length - i -1])) {
+            if (letters[i] != letters[letters.length - i -1]) {
                 return false;
             }
         }
