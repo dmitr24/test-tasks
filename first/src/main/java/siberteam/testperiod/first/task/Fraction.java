@@ -2,6 +2,8 @@ package siberteam.testperiod.first.task;
 
 import siberteam.testperiod.first.exception.ForbiddenDenominatorException;
 
+import java.util.Objects;
+
 public class Fraction implements Comparable<Fraction> {
     final int nominator;
     final int denominator;
@@ -40,7 +42,7 @@ public class Fraction implements Comparable<Fraction> {
 
     @Override
     public int hashCode() {
-        return nominator * 31 / denominator;
+        return Objects.hash(nominator, denominator);
     }
 
     @Override

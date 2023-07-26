@@ -1,7 +1,8 @@
 package siberteam.testperiod.first.task;
 
-import java.util.List;
+import java.util.Arrays;
 import java.util.Objects;
+import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 public class StringUtils {
@@ -13,9 +14,11 @@ public class StringUtils {
         if (str == null) {
             return null;
         }
-        String[] splitWord = str.split("");
-        splitWord[0] = splitWord[0].toUpperCase();
-        return String.join("", splitWord);
+        char[] chars = str.toCharArray();
+        if (0 < chars.length && 'a' < chars[0] && chars[0] < 'z') {
+            chars[0] += LETTER_CASE_DISTANCE;
+        }
+        return String.copyValueOf(chars);
     }
 
     public static boolean isPalindrome(String str) {
@@ -38,23 +41,26 @@ public class StringUtils {
         if (Objects.isNull(str)) {
             return null;
         }
-         List<String> chars =  str.chars()
+         return str.chars()
                  .filter(StringUtils::isLetter)
-                 .boxed()
+                 .mapToObj(intVal -> (char) intVal)
                  .sorted(StringUtils::compareLetters)
-                 .map(StringUtils::fromInteger)
-                 .collect(Collectors.toList());
-        return String.join("", chars);
+                 .collect(Collector.of(
+                         StringBuilder::new,
+                         StringBuilder::append,
+                         StringBuilder::append,
+                         StringBuilder::toString)
+                 );
     }
 
-    private static int compareLetters(int left, int right) {
+    private static int compareLetters(char left, char right) {
         if (left < 97) {
             left += LETTER_CASE_DISTANCE;
         }
         if (right < 97) {
             right += LETTER_CASE_DISTANCE;
         }
-        return Integer.compare(left, right);
+        return Character.compare(left, right);
     }
 
     private static boolean isLetter(int character) {
@@ -64,10 +70,5 @@ public class StringUtils {
         } else {
             return false;
         }
-    }
-
-    private static String fromInteger(Integer intValue) {
-        char charValue = (char) intValue.intValue();
-        return String.valueOf(charValue);
     }
 }
