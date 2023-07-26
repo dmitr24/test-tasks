@@ -1,6 +1,6 @@
 package siberteam.testperiod.io.subtask.second;
 
-import siberteam.testperiod.io.subtask.common.console.ConsoleUtils;
+import siberteam.testperiod.io.subtask.common.util.ConsoleUtils;
 import siberteam.testperiod.io.subtask.common.io.Reader;
 import siberteam.testperiod.io.subtask.common.io.Writer;
 import siberteam.testperiod.io.subtask.second.data.Task;
