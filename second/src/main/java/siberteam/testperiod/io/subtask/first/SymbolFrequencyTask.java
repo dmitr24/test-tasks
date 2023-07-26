@@ -9,6 +9,8 @@ import java.util.Map;
 import java.util.Scanner;
 
 public class SymbolFrequencyTask {
+    private static final String DEFAULT_LOCATION = "/home/dmitryk/projects/main/second/src/main/resources/first/";
+
     public static void main(String[] args) {
         try {
             System.err.println("If trimmed string doesn't have signs, filename automatically sets to example-1.txt\n");
@@ -18,9 +20,11 @@ public class SymbolFrequencyTask {
             if (fileName.trim().length() == 0) {
                 fileName = "example-1.txt";
             }
+            Reader.setLocation(DEFAULT_LOCATION);
             String text = Reader.readFromFile(fileName);
             Map<String, Float> histogramData =  Analyzer.analyze(text);
             String output = HistogramUtils.parseToText(histogramData);
+            Writer.setLocation(DEFAULT_LOCATION);
             Writer.write(output);
         } catch (IOException exception) {
             System.err.println(exception.getMessage());

@@ -9,7 +9,7 @@ import java.nio.file.Paths;
 
 @NoArgsConstructor(access = AccessLevel.NONE)
 public class Writer {
-    private static final String DEFAULT_LOCATION = "/home/dmitryk/projects/main/second/src/main/resources/first/";
+    private static String location = "";
 
     public static void write(String text) throws IOException {
         Path filePath = getAcceptableFileName();
@@ -32,12 +32,16 @@ public class Writer {
     private static Path getAcceptableFileName() {
         Path path = null;
         for (int i = 1; i < Integer.MAX_VALUE; i++) {
-            String fileName = DEFAULT_LOCATION + "output-" + i + ".txt";
+            String fileName = location + "output-" + i + ".txt";
             path = Paths.get(fileName);
             if (!Files.exists(path)) {
                 break;
             }
         }
         return path;
+    }
+
+    public static void setLocation(String location) {
+        Writer.location = location;
     }
 }

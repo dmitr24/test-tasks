@@ -12,10 +12,10 @@ import java.util.stream.Stream;
 
 @NoArgsConstructor(access = AccessLevel.NONE)
 public class Reader {
-    private static final String DEFAULT_LOCATION = "/home/dmitryk/projects/main/second/src/main/resources/first/";
+    private static String location = "";
 
     public static String readFromFile(String fileName) throws IOException {
-        Path path = Paths.get(DEFAULT_LOCATION + fileName);
+        Path path = Paths.get(location + fileName);
         String result;
         try (Stream<String> lines = Files.lines(path, StandardCharsets.UTF_8)) {
             result = lines.collect(Collectors.joining());
@@ -23,5 +23,9 @@ public class Reader {
             throw new IOException("Unable to read the file with path " + path);
         }
         return result;
+    }
+
+    public static void setLocation(String location) {
+        Reader.location = location;
     }
 }
