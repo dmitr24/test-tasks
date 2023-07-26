@@ -1,8 +1,8 @@
 package siberteam.testperiod.io.subtask.first;
 
 import siberteam.testperiod.io.subtask.first.domain.Analyzer;
-import siberteam.testperiod.io.subtask.first.io.Reader;
-import siberteam.testperiod.io.subtask.first.io.Writer;
+import siberteam.testperiod.io.subtask.general.io.Reader;
+import siberteam.testperiod.io.subtask.general.io.Writer;
 import siberteam.testperiod.io.subtask.first.util.HistogramUtils;
 import java.io.IOException;
 import java.util.Map;
