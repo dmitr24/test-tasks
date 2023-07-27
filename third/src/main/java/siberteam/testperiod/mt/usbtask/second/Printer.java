@@ -18,7 +18,7 @@ public class Printer implements Runnable {
             isFirstDone.signalAll();
         } else {
             try {
-                while(!isFirstThreadPrinted){
+                while(!isFirstThreadPrinted) {
                     isFirstDone.await();
                 }
                 System.out.println(Thread.currentThread().getName());
