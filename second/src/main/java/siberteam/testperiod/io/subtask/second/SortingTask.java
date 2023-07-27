@@ -1,16 +1,27 @@
 package siberteam.testperiod.io.subtask.second;
 
-import siberteam.testperiod.io.subtask.second.communicator.SecondTaskUserCommunicator;
+import org.apache.commons.cli.*;
+import siberteam.testperiod.io.subtask.common.validator.FileValidator;
+import siberteam.testperiod.io.subtask.second.cli.CliParser;
+import siberteam.testperiod.io.subtask.second.data.SortRequest;
 import siberteam.testperiod.io.subtask.second.processor.TaskProcessor;
 
 public class SortingTask {
     private static final String DEFAULT_LOCATION = "/home/dmitryk/projects/main/second/src/main/resources/second/";
 
     public static void main(String[] args) {
-        SecondTaskUserCommunicator communicator = new SecondTaskUserCommunicator();
-        String fileName = communicator.getValidFileNameFromUser(DEFAULT_LOCATION);
-        String sorterClassName = communicator.getSorterClassNameFromUser();
-        TaskProcessor taskProcessor = new TaskProcessor();
-        taskProcessor.processTask(DEFAULT_LOCATION, fileName, sorterClassName);
+        try {
+            CliParser parser = new CliParser();
+            SortRequest sortRequest = parser.parse(args);
+            FileValidator validator = new FileValidator();
+            if (!validator.validate(sortRequest.getFileName())) {
+                System.err.println("File with such name not found");
+                System.exit(1);
+            }
+            TaskProcessor taskProcessor = new TaskProcessor();
+            taskProcessor.processTask(sortRequest);
+        } catch (ParseException exception) {
+            System.out.println(exception.getMessage());
+        }
     }
 }

@@ -24,3 +24,17 @@
 
 Тесты на эту задачу не писал, все необходимое проверил в ручную.
 
+### Изменния с Apache Commons CLI
+
+Монжо запустить из идеи без сборки со следующими параметрами (пример):
+
+```
+-i /home/dmitryk/projects/main/second/src/main/resources/second/example-1.txt 
+-o /home/dmitryk/projects/main/second/src/main/resources/second/ 
+-s siberteam.testperiod.io.subtask.second.sorter.AlphabetSorter
+```
+
+>  Джарник запускался с первой подзадачей,
+но из-за зависиомти commons.cli он не может загруить класс внешнего парсера.
+
+_Видать, нужно ему задать дополнительную библиотеку для подтягивания._

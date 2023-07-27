@@ -20,8 +20,4 @@ public class SecondTaskUserCommunicator extends UserCommunicator {
         System.out.print("Please, enter full qualified classname of sorter that you chose: ");
         return scanner.nextLine();
     }
-
-    private void printSorters() {
-
-    }
 }

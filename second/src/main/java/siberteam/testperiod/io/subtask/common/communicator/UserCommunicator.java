@@ -1,8 +1,6 @@
 package siberteam.testperiod.io.subtask.common.communicator;
 
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import siberteam.testperiod.io.subtask.common.validator.FileValidator;
 import java.util.Scanner;
 
 public abstract class UserCommunicator {
@@ -11,31 +9,14 @@ public abstract class UserCommunicator {
     public abstract void showFileNameChooseInfo();
     protected abstract void showChooseInvitation();
 
-    public String getFileNameFromUser() {
-        showFileNameChooseInfo();
-        showChooseInvitation();
-        return getNextUserInputOrDefaultFileName();
-    }
-
     public String getValidFileNameFromUser(String dir) {
         showFileNameChooseInfo();
         showChooseInvitation();
         String fileName = getNextUserInputOrDefaultFileName();
-        Path path = Paths.get(dir + fileName);
-        if (!Files.exists(path)) {
-            fileName = retryGetProperFileName(dir);
-        }
-        return fileName;
-    }
-
-    protected String retryGetProperFileName(String dir) {
-        boolean isFileNameValid = false;
-        String fileName = null;
-        while (!isFileNameValid) {
+        FileValidator validator = new FileValidator();
+        while (!validator.validate(dir, fileName)) {
             System.out.print("Such file not found. Please, enter once more: ");
             fileName = getNextUserInputOrDefaultFileName();
-            Path pAth = Paths.get(dir + fileName);
-            isFileNameValid = Files.exists(pAth);
         }
         return fileName;
     }

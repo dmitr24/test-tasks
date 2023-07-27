@@ -43,6 +43,6 @@
                 </configuration>
             </plugin>
         </plugins>
-        <finalName>sorter</finalName>
+        <finalName>app</finalName>
     </build>
 </project>
