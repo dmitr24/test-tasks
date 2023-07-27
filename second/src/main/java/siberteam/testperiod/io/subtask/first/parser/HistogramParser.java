@@ -1,27 +1,26 @@
-package siberteam.testperiod.io.subtask.first.util;
+package siberteam.testperiod.io.subtask.first.parser;
 
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-@NoArgsConstructor(access = AccessLevel.NONE)
-public class HistogramUtils {
-    private static final String ENTRY_PERCENT_SIGN = "#";
+@RequiredArgsConstructor
+public class HistogramParser {
+    private final String entryPercentSign;
 
-    public static String parseToText(Map<String, Float> histogram) {
+    public String parseToText(Map<String, Float> histogram) {
         return histogram.entrySet()
                 .stream()
                 .sorted((left, right) -> - Float.compare(left.getValue(), right.getValue()))
-                .map(HistogramUtils::parseHistogramLine)
+                .map(this::parseHistogramLine)
                 .collect(Collectors.joining());
     }
 
-    private static String parseHistogramLine(Map.Entry<String, Float> histogramEntry) {
+    private String parseHistogramLine(Map.Entry<String, Float> histogramEntry) {
         StringBuilder result = new StringBuilder(histogramEntry.getKey() +
                 " (" + String.format("%.2f", histogramEntry.getValue()) + "%): ");
         for (int i = 0; i < histogramEntry.getValue(); i++) {
-            result.append(ENTRY_PERCENT_SIGN);
+            result.append(entryPercentSign);
         }
         result.append('\n');
         return result.toString();

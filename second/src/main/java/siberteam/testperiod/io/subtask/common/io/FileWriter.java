@@ -1,22 +1,21 @@
 package siberteam.testperiod.io.subtask.common.io;
 
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-@NoArgsConstructor(access = AccessLevel.NONE)
-public class Writer {
-    private static String location = "";
+@RequiredArgsConstructor
+public class FileWriter {
+    private final String location;
 
-    public static void write(String text) throws IOException {
+    public void write(String text) throws IOException {
         Path filePath = getAcceptableFileName();
         writeToParticularFile(filePath, text);
     }
 
-    private static void writeToParticularFile(Path filePath, String text) throws IOException {
+    private void writeToParticularFile(Path filePath, String text) throws IOException {
         try {
             Files.createFile(filePath);
             if (Files.isWritable(filePath)) {
@@ -29,7 +28,7 @@ public class Writer {
         }
     }
 
-    private static Path getAcceptableFileName() {
+    private Path getAcceptableFileName() {
         Path path = null;
         for (int i = 1; i < Integer.MAX_VALUE; i++) {
             String fileName = location + "output-" + i + ".txt";
@@ -39,9 +38,5 @@ public class Writer {
             }
         }
         return path;
-    }
-
-    public static void setLocation(String location) {
-        Writer.location = location;
     }
 }
