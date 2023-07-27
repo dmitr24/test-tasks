@@ -1,6 +1,6 @@
 package siberteam.testperiod.mt.usbtask.first;
 
-public class StatePrinter {
+public class StatePrinterTask {
     public static void main(String[] args) throws InterruptedException {
         Thread thread = new Thread(() -> {
             try {

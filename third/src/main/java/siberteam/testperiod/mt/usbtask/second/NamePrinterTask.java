@@ -1,6 +1,6 @@
 package siberteam.testperiod.mt.usbtask.second;
 
-public class NamePrinter {
+public class NamePrinterTask {
     public static void main(String[] args) {
         Printer printer = new Printer();
         Thread firstThread = new Thread(printer);
