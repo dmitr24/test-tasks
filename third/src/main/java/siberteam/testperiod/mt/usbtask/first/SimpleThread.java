@@ -1,15 +1,17 @@
 package siberteam.testperiod.mt.usbtask.first;
 
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
 
 @Getter
-public class SimpleThread extends Thread {
-    private Lock lock = new ReentrantLock();
+@RequiredArgsConstructor
+public class SimpleThread implements Runnable {
+    private final Lock lock;
 
     @Override
     public void run() {
-
+        lock.lock();;
+        lock.unlock();
     }
 }
