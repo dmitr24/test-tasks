@@ -34,12 +34,4 @@ public class FileReader {
             throw new IOException("Unable to get lines from file with path " + path);
         }
     }
-
-    public long getLinesCount() throws IOException {
-        try (Stream<String> lines = Files.lines(path, StandardCharsets.UTF_8)) {
-            return lines.filter(line -> line.trim().length() > 0).count();
-        } catch (IOException exception) {
-            throw new IOException("Unable to get lines count from file with path " + path);
-        }
-    }
 }

@@ -28,9 +28,8 @@ public class TaskProcessor {
 
     private Map<String, Float> analyze(FileReader reader) throws IOException {
         try (Stream<String> lines = reader.getNotClosedLinesStream()) {
-            long linesCount = reader.getLinesCount();
             Analyzer analyzer = new Analyzer();
-            return analyzer.analyze(lines, linesCount);
+            return analyzer.analyze(lines);
         }
     }
 }
