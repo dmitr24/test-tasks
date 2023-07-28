@@ -1,18 +1,34 @@
 package siberteam.testperiod.mt.usbtask.third;
 
 import lombok.RequiredArgsConstructor;
+import java.util.concurrent.locks.Condition;
+import java.util.concurrent.locks.Lock;
 
 @RequiredArgsConstructor
 public class MessagePrinter implements Runnable {
     private final String message;
     private final int recreationsBeforePrint;
-    private final Runnable print;
+    private final Lock printerLock;
+    private final Condition secondLeftCondition;
+    private final int executionTime;
 
     @Override
     public void run() {
-        int repeation = 0;
-        while (repeation < recreationsBeforePrint) {
-
+        long startTime = System.currentTimeMillis();
+        while (System.currentTimeMillis() - startTime < executionTime) {
+            printerLock.lock();
+            try {
+                int repeation = 0;
+                while (repeation < recreationsBeforePrint) {
+                    secondLeftCondition.await();
+                    repeation++;
+                }
+                System.out.println(message);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            } finally {
+                printerLock.unlock();
+            }
         }
     }
 }
