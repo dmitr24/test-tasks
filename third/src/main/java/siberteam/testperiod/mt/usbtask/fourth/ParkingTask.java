@@ -1,6 +1,5 @@
 package siberteam.testperiod.mt.usbtask.fourth;
 
-import siberteam.testperiod.mt.usbtask.util.Randomizer;
 import java.util.Scanner;
 
 public class ParkingTask {
