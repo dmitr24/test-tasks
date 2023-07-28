@@ -1,4 +1,4 @@
-package siberteam.testperiod.mt.usbtask.second;
+package siberteam.testperiod.mt.subtask.second;
 
 public class NamePrinterTask {
     public static void main(String[] args) {

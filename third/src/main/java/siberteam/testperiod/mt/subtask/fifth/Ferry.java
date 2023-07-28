@@ -1,4 +1,4 @@
-package siberteam.testperiod.mt.usbtask.fifth;
+package siberteam.testperiod.mt.subtask.fifth;
 
 import java.util.concurrent.CyclicBarrier;
 import java.util.concurrent.ExecutorService;

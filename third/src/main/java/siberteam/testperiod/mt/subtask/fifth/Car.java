@@ -1,4 +1,4 @@
-package siberteam.testperiod.mt.usbtask.fifth;
+package siberteam.testperiod.mt.subtask.fifth;
 
 import lombok.RequiredArgsConstructor;
 import java.util.concurrent.BrokenBarrierException;

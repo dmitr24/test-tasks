@@ -1,4 +1,4 @@
-package siberteam.testperiod.mt.usbtask.fourth;
+package siberteam.testperiod.mt.subtask.fourth;
 
 import lombok.RequiredArgsConstructor;
 import java.util.concurrent.ExecutorService;

@@ -1,4 +1,4 @@
-package siberteam.testperiod.mt.usbtask.third;
+package siberteam.testperiod.mt.subtask.third;
 
 import lombok.RequiredArgsConstructor;
 import java.util.concurrent.locks.Condition;

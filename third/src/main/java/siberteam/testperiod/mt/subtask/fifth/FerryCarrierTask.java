@@ -1,4 +1,4 @@
-package siberteam.testperiod.mt.usbtask.fifth;
+package siberteam.testperiod.mt.subtask.fifth;
 
 public class FerryCarrierTask {
     public static void main(String[] args) throws InterruptedException {

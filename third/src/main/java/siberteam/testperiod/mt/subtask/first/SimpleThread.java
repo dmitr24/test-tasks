@@ -1,4 +1,4 @@
-package siberteam.testperiod.mt.usbtask.first;
+package siberteam.testperiod.mt.subtask.first;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

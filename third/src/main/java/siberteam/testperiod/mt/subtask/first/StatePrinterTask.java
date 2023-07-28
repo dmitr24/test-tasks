@@ -1,4 +1,4 @@
-package siberteam.testperiod.mt.usbtask.first;
+package siberteam.testperiod.mt.subtask.first;
 
 public class StatePrinterTask {
     public static void main(String[] args) throws InterruptedException {

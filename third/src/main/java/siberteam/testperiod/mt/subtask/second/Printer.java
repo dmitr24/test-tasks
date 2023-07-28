@@ -1,4 +1,4 @@
-package siberteam.testperiod.mt.usbtask.second;
+package siberteam.testperiod.mt.subtask.second;
 
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;

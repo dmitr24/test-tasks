@@ -1,4 +1,4 @@
-package siberteam.testperiod.mt.usbtask.util;
+package siberteam.testperiod.mt.subtask.util;
 
 import java.util.Random;
 

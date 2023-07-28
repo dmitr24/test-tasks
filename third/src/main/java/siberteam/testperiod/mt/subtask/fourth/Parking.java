@@ -1,6 +1,6 @@
-package siberteam.testperiod.mt.usbtask.fourth;
+package siberteam.testperiod.mt.subtask.fourth;
 
-import siberteam.testperiod.mt.usbtask.util.Randomizer;
+import siberteam.testperiod.mt.subtask.util.Randomizer;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
