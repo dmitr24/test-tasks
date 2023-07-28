@@ -8,7 +8,7 @@ import java.util.stream.Collectors;
 public class HistogramParser {
     private final String entryPercentSign;
 
-    public String parseToText(Map<String, Float> histogram) {
+    public String parseToText(Map<Character, Float> histogram) {
         return histogram.entrySet()
                 .stream()
                 .sorted((left, right) -> - Float.compare(left.getValue(), right.getValue()))
@@ -16,7 +16,7 @@ public class HistogramParser {
                 .collect(Collectors.joining());
     }
 
-    private String parseHistogramLine(Map.Entry<String, Float> histogramEntry) {
+    private String parseHistogramLine(Map.Entry<Character, Float> histogramEntry) {
         StringBuilder result = new StringBuilder(histogramEntry.getKey() +
                 " (" + String.format("%.2f", histogramEntry.getValue()) + "%): ");
         for (int i = 0; i < histogramEntry.getValue(); i++) {

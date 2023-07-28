@@ -15,7 +15,7 @@ public class TaskProcessor {
         try {
             Path path = Paths.get(dir + fileName);
             FileReader reader = new FileReader(path);
-            Map<String, Float> histogramData = analyze(reader);
+            Map<Character, Float> histogramData = analyze(reader);
             HistogramParser histogramParser = new HistogramParser("-");
             String output = histogramParser.parseToText(histogramData);
             FileWriter writer = new FileWriter(dir);
@@ -26,7 +26,7 @@ public class TaskProcessor {
         }
     }
 
-    private Map<String, Float> analyze(FileReader reader) throws IOException {
+    private Map<Character, Float> analyze(FileReader reader) throws IOException {
         try (Stream<String> lines = reader.getNotClosedLinesStream()) {
             Analyzer analyzer = new Analyzer();
             return analyzer.analyze(lines);

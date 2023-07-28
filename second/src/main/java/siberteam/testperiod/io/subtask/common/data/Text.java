@@ -9,8 +9,15 @@ import java.util.stream.Stream;
 public class Text {
     private final String content;
 
-    public List<String> getDistinctLetters() {
+    public List<Character> getDistinctLetters() {
         return Stream.of(content.split(""))
+                .map(stringLetter -> {
+                    try {
+                        return Character.valueOf(stringLetter.charAt(0));
+                    } catch (IndexOutOfBoundsException exception) {
+                        return null;
+                    }
+                })
                 .distinct()
                 .collect(Collectors.toList());
     }
