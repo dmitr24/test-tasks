@@ -3,7 +3,7 @@ package siberteam.testperiod.mt.usbtask.util;
 import java.util.Random;
 
 public class Randomizer {
-    private Random random;
+    private final Random random;
 
     public Randomizer() {
         this.random = new Random();
@@ -12,6 +12,6 @@ public class Randomizer {
     public int getRandomNumber(int leftBorder, int rightBorder) {
         return random.ints(leftBorder, rightBorder)
                 .findAny()
-                .getAsInt();
+                .orElse(0);
     }
 }

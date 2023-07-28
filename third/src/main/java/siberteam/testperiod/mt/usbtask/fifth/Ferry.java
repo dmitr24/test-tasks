@@ -17,9 +17,6 @@ public class Ferry {
         carryExecutor.shutdown();
     }
 
-    public boolean isFinished() {
-        return carryExecutor.isShutdown();
-    }
     public void carry() {
         carryExecutor.submit(this::carryIteration);
     }

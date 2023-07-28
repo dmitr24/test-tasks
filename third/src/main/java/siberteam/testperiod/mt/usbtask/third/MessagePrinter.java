@@ -18,10 +18,10 @@ public class MessagePrinter implements Runnable {
         while (System.currentTimeMillis() - startTime < executionTime) {
             printerLock.lock();
             try {
-                int repeation = 0;
-                while (repeation < recreationsBeforePrint) {
+                int repeating = 0;
+                while (repeating < recreationsBeforePrint) {
                     secondLeftCondition.await();
-                    repeation++;
+                    repeating++;
                 }
                 System.out.println(message);
             } catch (InterruptedException e) {

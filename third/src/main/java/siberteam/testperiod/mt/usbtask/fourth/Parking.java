@@ -68,11 +68,11 @@ public class Parking {
     }
 
     public int waitForFreeSpace() {
-        int freeSpaceIdex = getFreeSpaceIndex();
-        while (freeSpaceIdex == -1) {
-            freeSpaceIdex = getFreeSpaceIndex();
+        int freeSpaceIndex = getFreeSpaceIndex();
+        while (freeSpaceIndex == -1) {
+            freeSpaceIndex = getFreeSpaceIndex();
         }
-        return freeSpaceIdex;
+        return freeSpaceIndex;
     }
 
     public int getFreeSpaceIndex() {

@@ -11,7 +11,7 @@ public class SimpleThread implements Runnable {
 
     @Override
     public void run() {
-        lock.lock();;
+        lock.lock();
         lock.unlock();
     }
 }
