@@ -1,9 +1,12 @@
 package siberteam.testperiod.io.subtask.second.sorter;
 
 import siberteam.testperiod.io.subtask.common.data.Text;
+import siberteam.testperiod.io.subtask.second.annotation.SorterInfo;
 import java.util.stream.Collectors;
 
 @SuppressWarnings("unused")
+@SorterInfo(name = "ASCII biggest letter sorter",
+        description = "Sorting words by biggest containing ASCII character")
 public class BiggestASCIISymbolSorter implements Sorter {
     @Override
     public String sort(Text text) {
@@ -22,9 +25,9 @@ public class BiggestASCIISymbolSorter implements Sorter {
     private static char getBiggestASCIIChar(String str) {
         char[] chars = str.toCharArray();
         char biggestChar = 0;
-        for (int i = 0; i < chars.length; i++) {
-            if (chars[i] > biggestChar) {
-                biggestChar = chars[i];
+        for (char aChar : chars) {
+            if (aChar > biggestChar) {
+                biggestChar = aChar;
             }
         }
         return biggestChar;
