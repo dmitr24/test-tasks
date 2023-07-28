@@ -7,12 +7,7 @@ public class ParkingTask {
         System.out.print("Please, enter the number of parking places: ");
         Scanner scanner = new Scanner(System.in);
         int n = scanner.nextInt();
-        boolean[] parkingPlace = new boolean[n];
-        Parking parking = new Parking(parkingPlace);
-        long startTime = System.currentTimeMillis();
-        while (System.currentTimeMillis() - startTime < 60_000) {
-            new Thread(parking::park).start();
-            Thread.sleep(500);
-        }
+        ParkingSimulation parkingSimulation = new ParkingSimulation(n);
+        parkingSimulation.simulate();
     }
 }

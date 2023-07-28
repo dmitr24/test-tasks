@@ -14,6 +14,12 @@ public class Parking {
     }
 
     public void park() {
+        int parkingSpaceIndex = getParkingSpace();
+        holdParkingSpace();
+        leaveParkingSpace(parkingSpaceIndex);
+    }
+
+    private int getParkingSpace() {
         System.out.println("Car (" + Thread.currentThread().getName() + ") looking for park space");
         boolean success = false;
         int freeSpaceIndex = -1;
@@ -22,6 +28,10 @@ public class Parking {
             success = makeParkingAttempt(freeSpaceIndex);
         }
         System.out.println("Car (" + Thread.currentThread().getName() + ") parked successfully");
+        return freeSpaceIndex;
+    }
+
+    private void holdParkingSpace() {
         Randomizer randomizer = new Randomizer();
         int sleepTime = randomizer.getRandomNumber(2000, 8000);
         try {
@@ -31,9 +41,12 @@ public class Parking {
                     " Waiting interruption.");
             System.exit(1);
         }
+    }
+
+    private void leaveParkingSpace(int parkingSpaceIndex) {
+        parkingLock.writeLock().lock();
         try {
-            parkingLock.writeLock().lock();
-            parkingSpaces[freeSpaceIndex] =  false;
+            parkingSpaces[parkingSpaceIndex] =  false;
             System.out.println("Car (" + Thread.currentThread().getName() + ") removed successfully");
         } finally {
             parkingLock.writeLock().unlock();
@@ -41,8 +54,8 @@ public class Parking {
     }
 
     private boolean makeParkingAttempt(int freeSpaceIndex) {
+        parkingLock.writeLock().lock();
         try {
-            parkingLock.writeLock().lock();
             if (!parkingSpaces[freeSpaceIndex]) {
                 parkingSpaces[freeSpaceIndex] = true;
                 return true;
@@ -64,18 +77,18 @@ public class Parking {
 
     public int getFreeSpaceIndex() {
         Lock readLock = parkingLock.readLock();
-        readLock.lock();
-        int freeIndex = -1;
         try {
+            readLock.lock();
+            int freeIndex = -1;
             for (int i = 0; i < parkingSpaces.length; i++) {
                 if (!parkingSpaces[i]) {
                     freeIndex = i;
                     break;
                 }
             }
+            return freeIndex;
         } finally {
             readLock.unlock();
         }
-        return freeIndex;
     }
 }
