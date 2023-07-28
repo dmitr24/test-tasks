@@ -12,17 +12,17 @@ public class BiggestASCIISymbolSorter implements Sorter {
     public String sort(Text text) {
         return text
                 .getNotEmptyWords()
-                .sorted(BiggestASCIISymbolSorter::compareStrings)
+                .sorted(this::compareStrings)
                 .collect(Collectors.joining("\n"));
     }
 
-    private static int compareStrings(String left, String right) {
+    private int compareStrings(String left, String right) {
         char leftBiggestChar = getBiggestASCIIChar(left);
         char rightBiggestChar = getBiggestASCIIChar(right);
         return Integer.compare(leftBiggestChar, rightBiggestChar);
     }
 
-    private static char getBiggestASCIIChar(String str) {
+    private char getBiggestASCIIChar(String str) {
         char[] chars = str.toCharArray();
         char biggestChar = 0;
         for (char aChar : chars) {

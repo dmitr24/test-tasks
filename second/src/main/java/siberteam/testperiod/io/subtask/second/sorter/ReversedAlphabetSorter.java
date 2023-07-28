@@ -12,12 +12,12 @@ public class ReversedAlphabetSorter implements Sorter {
     public String sort(Text text) {
         return text
                 .getNotEmptyWords()
-                .map(ReversedAlphabetSorter::reverseString)
+                .map(this::reverseString)
                 .sorted()
                 .collect(Collectors.joining("\n"));
     }
 
-    private static String reverseString(String str) {
+    private String reverseString(String str) {
         StringBuilder stringBuilder = new StringBuilder(str);
         stringBuilder.reverse();
         return stringBuilder.toString();
