@@ -15,11 +15,11 @@ public class Ferry {
 
     public void stopCarrying() {
         carryExecutor.shutdown();
-        if (barrier.getNumberWaiting() == 0) {
-            System.exit(0);
-        }
     }
 
+    public boolean isFinished() {
+        return carryExecutor.isShutdown();
+    }
     public void carry() {
         carryExecutor.submit(this::carryIteration);
     }
