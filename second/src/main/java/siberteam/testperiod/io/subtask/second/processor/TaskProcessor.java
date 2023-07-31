@@ -1,27 +1,23 @@
 package siberteam.testperiod.io.subtask.second.processor;
 
-import siberteam.testperiod.io.subtask.common.data.Text;
 import siberteam.testperiod.io.subtask.common.io.FileReader;
 import siberteam.testperiod.io.subtask.common.io.FileWriter;
 import siberteam.testperiod.io.subtask.second.data.SortRequest;
+import siberteam.testperiod.io.subtask.second.parser.StreamTextParser;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.List;
+import java.util.stream.Stream;
 
 public class TaskProcessor {
     public void processTask(SortRequest sortRequest) {
         try {
-            Path path = Paths.get(sortRequest.getFileName());
-            FileReader reader = new FileReader(path);
-            Text text = new Text(reader.readWholeFile());
-            Class<?> sorter = Class.forName(sortRequest.getSorterName());
-            Method invokableMethod = sorter
-                    .getDeclaredMethod("sort", Text.class);
-            Object result = invokableMethod.invoke(sorter.newInstance(), text);
-            FileWriter writer = new FileWriter(sortRequest.getOutputDir());
-            writer.write(result.toString());
+            List<String> words = getWords(sortRequest.getFileName());
+            Object result = sort(sortRequest.getSorterName(), words);
+            write(sortRequest.getOutputDir(), result.toString());
         } catch (IOException exception) {
             System.err.println(exception.getMessage());
             System.exit(1);
@@ -41,5 +37,28 @@ public class TaskProcessor {
             System.err.println("Can't create instance of sorter class");
             System.exit(1);
         }
+    }
+
+    private List<String> getWords(String filePath) throws IOException {
+        Path path = Paths.get(filePath);
+        FileReader fileReader = new FileReader(path);
+        try (Stream<String> lines = fileReader.getNotClosedLinesStream()) {
+            StreamTextParser streamTextParser = new StreamTextParser(lines);
+            return streamTextParser.getDictionary();
+        }
+    }
+
+    private Object sort(String sorterName, List<String> words) throws NoSuchMethodException,
+            ClassNotFoundException, InstantiationException, IllegalAccessException,
+            InvocationTargetException {
+        Class<?> sorter = Class.forName(sorterName);
+        Method invokableMethod = sorter
+                .getDeclaredMethod("sort", List.class);
+        return invokableMethod.invoke(sorter.newInstance(), words);
+    }
+
+    private void write(String outputDir, String text) throws IOException {
+        FileWriter writer = new FileWriter(outputDir);
+        writer.write(text);
     }
 }
