@@ -9,8 +9,10 @@ public class Jetty {
     private final CyclicBarrier barrier;
     private final Ferry ferry;
     private final ExecutorService carsAdder;
+    private final int executionTime;
 
-    public Jetty(int carsPerIteration) {
+    public Jetty(int carsPerIteration, int executionTime) {
+        this.executionTime = executionTime;
         barrier = new CyclicBarrier(carsPerIteration, this::printBreak);
         ferry = new Ferry(barrier);
         carsAdder = Executors.newCachedThreadPool();
@@ -18,9 +20,10 @@ public class Jetty {
 
     public void start() throws InterruptedException {
         long startTime = System.currentTimeMillis();
-        while (System.currentTimeMillis() - startTime < 60_000) {
+        while (System.currentTimeMillis() - startTime < executionTime) {
             addCar();
         }
+        Thread.sleep(150);
         close();
     }
 
@@ -41,10 +44,9 @@ public class Jetty {
     }
 
     private void close() {
-        carsAdder.shutdown();
+        carsAdder.shutdownNow();
         ferry.stopCarrying();
         System.out.println("Jetty closing, cars which still waiting will be forgotten.");
-        System.exit(0);
     }
 
     private void printBreak() {

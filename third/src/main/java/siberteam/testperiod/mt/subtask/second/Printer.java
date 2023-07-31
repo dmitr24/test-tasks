@@ -9,16 +9,15 @@ public class Printer implements Runnable {
     private final Condition isFirstDone = printLock.newCondition();
     private final Condition isSecondDone = printLock.newCondition();
     private boolean isSecondThreadTurn = false;
-    private final int executionTime;
+    private boolean isClosing = false;
 
-    public Printer(int executionTime) {
-        this.executionTime = executionTime;
+    public void close() {
+        this.isClosing = true;
     }
 
     @Override
     public void run() {
-        long startTime = System.currentTimeMillis();
-        while (System.currentTimeMillis() - startTime < executionTime) {
+        while (!isClosing) {
             printLock.lock();
             try {
                 if (Thread.currentThread().getName().equals("Thread 1")) {
@@ -33,6 +32,7 @@ public class Printer implements Runnable {
                         isFirstDone.await();
                     }
                     System.out.println(Thread.currentThread().getName());
+                    System.out.println("--------");
                     isSecondThreadTurn = false;
                     isSecondDone.signalAll();
                 }

@@ -7,7 +7,8 @@ public class ParkingTask {
         System.out.print("Please, enter the number of parking places: ");
         Scanner scanner = new Scanner(System.in);
         int n = scanner.nextInt();
-        ParkingSimulation parkingSimulation = new ParkingSimulation(n);
+        int simulationTime = 60_000;
+        ParkingSimulation parkingSimulation = new ParkingSimulation(n, simulationTime);
         parkingSimulation.simulate();
     }
 }
