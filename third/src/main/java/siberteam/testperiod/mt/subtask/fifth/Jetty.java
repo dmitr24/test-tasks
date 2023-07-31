@@ -1,9 +1,6 @@
 package siberteam.testperiod.mt.subtask.fifth;
 
-import java.util.concurrent.BrokenBarrierException;
-import java.util.concurrent.CyclicBarrier;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
+import java.util.concurrent.*;
 
 public class Jetty {
     private final CyclicBarrier barrier;
@@ -20,16 +17,19 @@ public class Jetty {
 
     public void start() throws InterruptedException {
         long startTime = System.currentTimeMillis();
+        Future future = null;
         while (System.currentTimeMillis() - startTime < executionTime) {
-            addCar();
+            future = addCar();
         }
-        Thread.sleep(150);
+        if (future != null) {
+            future.cancel(true);
+        }
         close();
     }
 
-    private void addCar() throws InterruptedException {
+    private Future addCar() throws InterruptedException {
         Thread.sleep(400);
-        carsAdder.submit(this::wrapFerryWaiting);
+        return carsAdder.submit(this::wrapFerryWaiting);
     }
 
     private void wrapFerryWaiting() {
@@ -44,7 +44,7 @@ public class Jetty {
     }
 
     private void close() {
-        carsAdder.shutdownNow();
+        carsAdder.shutdown();
         ferry.stopCarrying();
         System.out.println("Jetty closing, cars which still waiting will be forgotten.");
     }
