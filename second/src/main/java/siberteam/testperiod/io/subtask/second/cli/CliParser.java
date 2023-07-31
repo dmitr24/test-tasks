@@ -2,6 +2,7 @@ package siberteam.testperiod.io.subtask.second.cli;
 
 import org.apache.commons.cli.*;
 import siberteam.testperiod.io.subtask.second.data.SortRequest;
+import siberteam.testperiod.io.subtask.second.sorter.SorterFactory;
 
 public class CliParser {
     private final Option fileNameOption;
@@ -22,11 +23,11 @@ public class CliParser {
         options.addOption(helpOption);
     }
 
-    public SortRequest parse(String[] args) throws ParseException {
+    public SortRequest parse(String[] args, SorterFactory sorterFactory) throws ParseException {
         SortRequest sortInfo = new SortRequest();
         CommandLineParser parser = new DefaultParser();
         CommandLine commandLine = parser.parse(options, args);
-        handleHelp(commandLine);
+        handleHelp(commandLine, sorterFactory);
         sortInfo.setFileName(getFileName(commandLine));
         sortInfo.setOutputDir(getDirectoryName(commandLine));
         sortInfo.setSorterName(getSorterName(commandLine));
@@ -57,23 +58,14 @@ public class CliParser {
         return commandLine.getOptionValue(sorterNameOption);
     }
 
-    private void handleHelp(CommandLine commandLine) {
+    private void handleHelp(CommandLine commandLine, SorterFactory sorterFactory) {
         if (commandLine.hasOption(helpOption)) {
             System.out.println(">>> Example of valid command to start provided below\n" +
                     "java -jar sorter.jar -i input.txt " +
                     "-o output-folder/ " +
                     "-s siberteam.testperiod.io.subtask.second.sorter.AlphabetSorter\n");
             System.out.println(">>> Available sorters");
-            System.out.println("--- Alphabet sort - " +
-                    "siberteam.testperiod.io.subtask.second.sorter.AlphabetSorter");
-            System.out.println("--- Reverse alphabet sort - " +
-                    "siberteam.testperiod.io.subtask.second.sorter.ReversedAlphabetSorter");
-            System.out.println("--- Word length sort - " +
-                    "siberteam.testperiod.io.subtask.second.sorter.WordLengthSorter ");
-            System.out.println("--- Count of unique symbols sort - " +
-                    "siberteam.testperiod.io.subtask.second.sorter.UniqueLettersCountsSorter");
-            System.out.println("--- ASCII symbol value sort - " +
-                    "siberteam.testperiod.io.subtask.second.sorter.BiggestASCIISymbolSorter");
+            sorterFactory.getSortersData().forEach(System.out::println);
             System.exit(0);
         }
     }
