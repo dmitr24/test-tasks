@@ -7,8 +7,6 @@ import siberteam.testperiod.io.subtask.second.data.SortRequest;
 import siberteam.testperiod.io.subtask.second.processor.TaskProcessor;
 
 public class SortingTask {
-    private static final String DEFAULT_LOCATION = "/home/dmitryk/projects/main/second/src/main/resources/second/";
-
     public static void main(String[] args) {
         try {
             CliParser parser = new CliParser();

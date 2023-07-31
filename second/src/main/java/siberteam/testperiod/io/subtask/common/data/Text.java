@@ -9,6 +9,10 @@ import java.util.stream.Stream;
 public class Text {
     private final String content;
 
+    public Text(List<String> lines) {
+        this.content = String.join("\n", lines);
+    }
+
     public List<Character> getDistinctLetters() {
         return Stream.of(content.split(""))
                 .map(stringLetter -> {
@@ -21,7 +25,7 @@ public class Text {
                 .distinct()
                 .collect(Collectors.toList());
     }
-
+    /// todo
     public Stream<String> getNotEmptyWords() {
         return Stream.of(content.split("[\n ]"))
                 .filter(str -> str.length() > 0);

@@ -1,5 +1,6 @@
 package siberteam.testperiod.io.subtask.second.processor;
 
+import siberteam.testperiod.io.subtask.common.data.Text;
 import siberteam.testperiod.io.subtask.common.io.FileReader;
 import siberteam.testperiod.io.subtask.common.io.FileWriter;
 import siberteam.testperiod.io.subtask.second.data.SortRequest;
@@ -51,10 +52,11 @@ public class TaskProcessor {
     private Object sort(String sorterName, List<String> words) throws NoSuchMethodException,
             ClassNotFoundException, InstantiationException, IllegalAccessException,
             InvocationTargetException {
+        Text text = new Text(words);
         Class<?> sorter = Class.forName(sorterName);
         Method invokableMethod = sorter
-                .getDeclaredMethod("sort", List.class);
-        return invokableMethod.invoke(sorter.newInstance(), words);
+                .getDeclaredMethod("sort", Text.class);
+        return invokableMethod.invoke(sorter.newInstance(), text);
     }
 
     private void write(String outputDir, String text) throws IOException {

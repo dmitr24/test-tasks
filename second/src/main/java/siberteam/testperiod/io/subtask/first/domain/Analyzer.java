@@ -50,7 +50,6 @@ public class Analyzer {
                     "").length();
             result.put(distinctLetter, entries);
         }
-        System.out.println(result);
         return result;
     }
 }
