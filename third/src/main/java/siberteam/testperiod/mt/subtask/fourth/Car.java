@@ -1,7 +1,6 @@
 package siberteam.testperiod.mt.subtask.fourth;
 
 import siberteam.testperiod.mt.subtask.fourth.ticket.ParkingTicket;
-import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
@@ -9,13 +8,11 @@ import java.util.concurrent.locks.ReentrantLock;
 public class Car {
     private final Lock parkingLock = new ReentrantLock();
     private final Condition isTurnToPark = parkingLock.newCondition();
-    private Lock parkingSpaceLock;
-    private Condition isParkingSpaceBusy;
+    private ParkingSpace activeParkingSpace;
     private ParkingTicket activeTicket;
     private long startTimeOnParkingSpace;
     private boolean isInQueue = true;
     private boolean isParkingCanceled = false;
-    private boolean isOnParkingSpace = false;
 
     public void setParkingTicket(ParkingTicket parkingTicket) {
         this.activeTicket = parkingTicket;
@@ -38,13 +35,7 @@ public class Car {
                         ") on parking");
                 startTimeOnParkingSpace = System.currentTimeMillis();
                 Thread.sleep(activeTicket.getTimeLeft());
-                parkingSpaceLock.lock();
-                try {
-                    isOnParkingSpace = false;
-                    isParkingSpaceBusy.signalAll();
-                } finally {
-                    parkingSpaceLock.unlock();
-                }
+                activeParkingSpace.makeFree();
                 System.out.println("Car (" + Thread.currentThread().getName() +
                         ") was on parking for " + getTimeOnParkingSpace());
             }
@@ -55,21 +46,15 @@ public class Car {
         }
     }
 
-    public void startParking(Lock parkingSpaceLock, Condition isParkingSpaceBusy) {
+    public void startParking(ParkingSpace parkingSpace) {
         parkingLock.lock();
         try {
-            this.parkingSpaceLock = parkingSpaceLock;
-            this.isParkingSpaceBusy = isParkingSpaceBusy;
+            this.activeParkingSpace = parkingSpace;
             isInQueue = false;
-            isOnParkingSpace = true;
             isTurnToPark.signalAll();
         } finally {
             parkingLock.unlock();
         }
-    }
-
-    public boolean getIsOnParkingSpace() {
-        return isOnParkingSpace;
     }
 
     public void stopTrying() {
