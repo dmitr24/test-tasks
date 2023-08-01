@@ -1,6 +1,8 @@
 package siberteam.testperiod.mt.subtask.fourth;
 
 import lombok.RequiredArgsConstructor;
+import siberteam.testperiod.mt.subtask.fourth.ticket.ParkingTicketProvider;
+
 import java.util.concurrent.*;
 
 @RequiredArgsConstructor
@@ -9,21 +11,14 @@ public class ParkingSimulation {
     private final int simulationTime;
 
     public void simulate() throws InterruptedException {
-        ArrayBlockingQueue<Car> carsQueue = new ArrayBlockingQueue<>(100, true);
-        Parking parking = new Parking(carsQueue, parkingSpacesCount);
-        ExecutorService parkingExecutor = Executors.newSingleThreadExecutor();
-        parkingExecutor.submit(parking::park);
+        ParkingTicketProvider ticketProvider = new ParkingTicketProvider(parkingSpacesCount);
         ExecutorService carsExecutor = Executors.newCachedThreadPool();
         long startTime = System.currentTimeMillis();
         while (System.currentTimeMillis() - startTime < simulationTime) {
-            Car newCar = new Car();
+            Car newCar = new Car(ticketProvider);
             carsExecutor.submit(newCar::park);
-            carsQueue.put(newCar);
             Thread.sleep(500);
         }
-        System.out.println("Cars in queue left after time's up: " + carsQueue.size());
-        parking.cancel();
-        parkingExecutor.shutdown();
         carsExecutor.shutdown();
     }
 }

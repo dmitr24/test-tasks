@@ -1,69 +1,41 @@
 package siberteam.testperiod.mt.subtask.fourth;
 
+import lombok.RequiredArgsConstructor;
 import siberteam.testperiod.mt.subtask.fourth.ticket.ParkingTicket;
-import java.util.concurrent.locks.Condition;
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
+import siberteam.testperiod.mt.subtask.fourth.ticket.ParkingTicketProvider;
+import siberteam.testperiod.mt.subtask.util.Randomizer;
 
+@RequiredArgsConstructor
 public class Car {
-    private final Lock parkingLock = new ReentrantLock();
-    private final Condition isTurnToPark = parkingLock.newCondition();
-    private ParkingSpace activeParkingSpace;
-    private ParkingTicket activeTicket;
+    private final ParkingTicketProvider parkingTicketProvider;
     private long startTimeOnParkingSpace;
-    private boolean isInQueue = true;
-    private boolean isParkingCanceled = false;
-
-    public void setParkingTicket(ParkingTicket parkingTicket) {
-        this.activeTicket = parkingTicket;
-    }
 
     public int getTimeOnParkingSpace() {
         return (int) (System.currentTimeMillis() - startTimeOnParkingSpace);
     }
 
     public void park() {
-        parkingLock.lock();
+        Thread.currentThread().setName("Car " + new Randomizer().getRandomNumber(0, 1000));
+        System.out.println("Car (" + Thread.currentThread().getName() +
+                    ") start waiting for queue");
+        ParkingTicket activeTicket = null;
         try {
-            System.out.println("Car (" + Thread.currentThread().getName() +
-                    ") waiting for queue");
-            while (!isParkingCanceled && isInQueue) {
-                isTurnToPark.await();
-            }
-            if (!isParkingCanceled) {
+            activeTicket = parkingTicketProvider.getTicket();
+            if (activeTicket != null) {
                 System.out.println("Car (" + Thread.currentThread().getName() +
                         ") on parking");
                 startTimeOnParkingSpace = System.currentTimeMillis();
                 Thread.sleep(activeTicket.getTimeLeft());
-                activeParkingSpace.makeFree();
                 System.out.println("Car (" + Thread.currentThread().getName() +
                         ") was on parking for " + getTimeOnParkingSpace());
+                unPark(activeTicket);
             }
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
-        } finally {
-            parkingLock.unlock();
         }
     }
 
-    public void startParking(ParkingSpace parkingSpace) {
-        parkingLock.lock();
-        try {
-            this.activeParkingSpace = parkingSpace;
-            isInQueue = false;
-            isTurnToPark.signalAll();
-        } finally {
-            parkingLock.unlock();
-        }
-    }
-
-    public void stopTrying() {
-        isParkingCanceled = true;
-        parkingLock.lock();
-        try {
-            isTurnToPark.signalAll();
-        } finally {
-            parkingLock.unlock();
-        }
+    private void unPark(ParkingTicket activeTicket) throws InterruptedException {
+        parkingTicketProvider.returnTicket(activeTicket);
     }
 }

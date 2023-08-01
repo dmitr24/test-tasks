@@ -1,7 +1,7 @@
 package siberteam.testperiod.mt.subtask.fourth.ticket;
 
 public class ParkingTicket {
-    private final long startTime;
+    private long startTime;
     private final int parkingTime;
 
     ParkingTicket(int time) {
@@ -11,5 +11,9 @@ public class ParkingTicket {
 
     public int getTimeLeft() {
         return (int) (parkingTime + startTime - System.currentTimeMillis());
+    }
+
+    public void refresh() {
+        this.startTime = System.currentTimeMillis();
     }
 }
