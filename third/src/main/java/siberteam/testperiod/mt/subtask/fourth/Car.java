@@ -18,9 +18,8 @@ public class Car {
         Thread.currentThread().setName("Car " + new Randomizer().getRandomNumber(0, 1000));
         System.out.println("Car (" + Thread.currentThread().getName() +
                     ") start waiting for queue");
-        ParkingTicket activeTicket = null;
         try {
-            activeTicket = parkingTicketProvider.getTicket();
+            ParkingTicket activeTicket = parkingTicketProvider.getTicket();
             System.out.println("Car (" + Thread.currentThread().getName() +
                     ") on parking");
             startTimeOnParkingSpace = System.currentTimeMillis();
