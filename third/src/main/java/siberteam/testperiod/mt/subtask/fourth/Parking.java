@@ -1,94 +1,59 @@
 package siberteam.testperiod.mt.subtask.fourth;
 
+import siberteam.testperiod.mt.subtask.fourth.ticket.ParkingTicket;
+import siberteam.testperiod.mt.subtask.fourth.ticket.ParkingTicketProvider;
 import siberteam.testperiod.mt.subtask.util.Randomizer;
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReadWriteLock;
-import java.util.concurrent.locks.ReentrantReadWriteLock;
+import java.util.concurrent.ArrayBlockingQueue;
 
 public class Parking {
-    private final ReadWriteLock parkingLock= new ReentrantReadWriteLock();
-    private final boolean[] parkingSpaces;
+    private final ParkingTicketProvider ticketProvider;
+    private final ArrayBlockingQueue<Car> carsQueue;
+    private final ArrayBlockingQueue<ParkingSpace> freeParkingSpaces;
+    private final ParkingSpace[] parkingSpaces;
+    private boolean isCancelled = false;
+    private final Randomizer randomizer;
 
-    public Parking(boolean[] parkingSpaces) {
-        this.parkingSpaces = parkingSpaces;
+    public Parking(ArrayBlockingQueue<Car> carsQueue, int parkingSpacesCount) throws InterruptedException {
+        this.carsQueue = carsQueue;
+        this.freeParkingSpaces = new ArrayBlockingQueue<>(parkingSpacesCount, true);
+        this.ticketProvider = new ParkingTicketProvider();
+        this.randomizer = new Randomizer();
+        this.parkingSpaces = new ParkingSpace[parkingSpacesCount];
+        for (int i = 0; i < parkingSpacesCount; i++) {
+            this.parkingSpaces[i] = new ParkingSpace(this.freeParkingSpaces);
+            freeParkingSpaces.put(this.parkingSpaces[i]);
+        }
     }
 
     public void park() {
-        int parkingSpaceIndex = getParkingSpace();
-        holdParkingSpace();
-        leaveParkingSpace(parkingSpaceIndex);
-    }
-
-    private int getParkingSpace() {
-        System.out.println("Car (" + Thread.currentThread().getName() + ") looking for park space");
-        boolean success = false;
-        int freeSpaceIndex = -1;
-        while (!success) {
-            freeSpaceIndex = waitForFreeSpace();
-            success = makeParkingAttempt(freeSpaceIndex);
-        }
-        System.out.println("Car (" + Thread.currentThread().getName() + ") parked successfully");
-        return freeSpaceIndex;
-    }
-
-    private void holdParkingSpace() {
-        Randomizer randomizer = new Randomizer();
-        int sleepTime = randomizer.getRandomNumber(2000, 8000);
-        try {
-            Thread.sleep(sleepTime);
-        } catch (InterruptedException exception) {
-            System.out.println("Car (" + Thread.currentThread().getName() + ") can't park." +
-                    " Waiting interruption.");
-            System.exit(1);
-        }
-    }
-
-    private void leaveParkingSpace(int parkingSpaceIndex) {
-        parkingLock.writeLock().lock();
-        try {
-            parkingSpaces[parkingSpaceIndex] =  false;
-            System.out.println("Car (" + Thread.currentThread().getName() + ") removed successfully");
-        } finally {
-            parkingLock.writeLock().unlock();
-        }
-    }
-
-    private boolean makeParkingAttempt(int freeSpaceIndex) {
-        parkingLock.writeLock().lock();
-        try {
-            if (!parkingSpaces[freeSpaceIndex]) {
-                parkingSpaces[freeSpaceIndex] = true;
-                return true;
-            } else {
-                return false;
-            }
-        } finally {
-            parkingLock.writeLock().unlock();
-        }
-    }
-
-    public int waitForFreeSpace() {
-        int freeSpaceIndex = getFreeSpaceIndex();
-        while (freeSpaceIndex == -1) {
-            freeSpaceIndex = getFreeSpaceIndex();
-        }
-        return freeSpaceIndex;
-    }
-
-    public int getFreeSpaceIndex() {
-        Lock readLock = parkingLock.readLock();
-        try {
-            readLock.lock();
-            int freeIndex = -1;
-            for (int i = 0; i < parkingSpaces.length; i++) {
-                if (!parkingSpaces[i]) {
-                    freeIndex = i;
-                    break;
+        while (!isCancelled) {
+            try {
+                Car newCar = carsQueue.take();
+                System.out.println("Cars in queue left: " + carsQueue.size());
+                if (newCar != null) {
+                    ParkingTicket newTicket = ticketProvider.getNewTicket();
+                    newCar.setParkingTicket(newTicket);
+                    System.out.println("Free parking spaces count - " + freeParkingSpaces.size());
+                    if (freeParkingSpaces.size() == 0 ){
+                        System.out.println("Waiting for free space");
+                    }
+                    freeParkingSpaces.take().parkCar(newCar);
                 }
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
             }
-            return freeIndex;
-        } finally {
-            readLock.unlock();
         }
+        while (carsQueue.size() != 0) {
+            Car car = carsQueue.remove();
+            car.stopTrying();
+        }
+        for (ParkingSpace parkingSpace : parkingSpaces) {
+            parkingSpace.close();
+        }
+        System.out.println("Parking canceled");
+    }
+
+    public void cancel() {
+        this.isCancelled = true;
     }
 }
