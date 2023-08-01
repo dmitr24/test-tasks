@@ -21,15 +21,13 @@ public class Car {
         ParkingTicket activeTicket = null;
         try {
             activeTicket = parkingTicketProvider.getTicket();
-            if (activeTicket != null) {
-                System.out.println("Car (" + Thread.currentThread().getName() +
-                        ") on parking");
-                startTimeOnParkingSpace = System.currentTimeMillis();
-                Thread.sleep(activeTicket.getTimeLeft());
-                System.out.println("Car (" + Thread.currentThread().getName() +
-                        ") was on parking for " + getTimeOnParkingSpace());
-                unPark(activeTicket);
-            }
+            System.out.println("Car (" + Thread.currentThread().getName() +
+                    ") on parking");
+            startTimeOnParkingSpace = System.currentTimeMillis();
+            Thread.sleep(activeTicket.getTimeLeft());
+            System.out.println("Car (" + Thread.currentThread().getName() +
+                    ") was on parking for " + getTimeOnParkingSpace());
+            unPark(activeTicket);
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
