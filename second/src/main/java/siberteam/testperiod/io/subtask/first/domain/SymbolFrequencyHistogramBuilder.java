@@ -1,8 +1,6 @@
 package siberteam.testperiod.io.subtask.first.domain;
 
-import siberteam.testperiod.io.subtask.common.data.Text;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class SymbolFrequencyHistogramBuilder {
@@ -25,20 +23,14 @@ public class SymbolFrequencyHistogramBuilder {
     }
 
     public void append(String line) {
-        Text text = new Text(line);
-        List<Character> distinctLetters = text.getDistinctLettersWithoutStream();
-        Map<Character, Integer> newLineStatistics = new HashMap<>();
-        int lineLength = line.length();
-        for (char distinctLetter : distinctLetters) {
-            int entries = lineLength - line.replace(String.valueOf(distinctLetter),
-                    "").length();
-            newLineStatistics.put(distinctLetter, entries);
+        char[] chars = line.toCharArray();
+        for (char character : chars) {
+            if (symbolCount.containsKey(character)) {
+                symbolCount.put(character, symbolCount.get(character) + 1);
+            } else {
+                symbolCount.put(character, 1);
+            }
         }
-        mergeNewStatistics(newLineStatistics);
-    }
-
-    private void mergeNewStatistics(Map<Character, Integer> rightLineHistogram) {
-        rightLineHistogram.forEach((key, value) -> symbolCount.merge(key, value, Integer::sum));
     }
 
     private int getTotalSymbols(Map<Character, Integer> entries) {
