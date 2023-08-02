@@ -12,7 +12,7 @@ public class Reader {
 
     public void readToBuilder(Consumer<Character> buildMethod) {
         try (BufferedReader reader = new BufferedReader(new FileReader(path))) {
-            int newChar = (char) reader.read();
+            int newChar = reader.read();
             while (newChar != -1) {
                 if (newChar != '\n') {
                     buildMethod.accept((char) newChar);
