@@ -21,7 +21,7 @@ public class TimingTask {
         executorService.submit(eachFiveSecondPrinter);
         executorService.submit(eachSevenSecondsMessagePrinter);
         TimerNotifier timer = new TimerNotifier(lock, condition, executionTime);
-        timer.run();
+        timer.start();
         eachFiveSecondPrinter.setTimerContinue(false);
         eachSevenSecondsMessagePrinter.setTimerContinue(false);
         executorService.shutdown();

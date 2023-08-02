@@ -3,7 +3,6 @@ package siberteam.testperiod.mt2.first;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
-
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
 

@@ -1,18 +1,16 @@
 package siberteam.testperiod.mt2.first;
 
 import lombok.RequiredArgsConstructor;
-
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
 
 @RequiredArgsConstructor
-public class TimerNotifier implements Runnable {
+public class TimerNotifier {
     private final Lock printerLock;
     private final Condition secondLeftCondition;
     private final int executionTime;
 
-    @Override
-    public void run() {
+    public void start() {
         long startTime = System.currentTimeMillis();
         while (System.currentTimeMillis() - startTime < executionTime) {
             try {
