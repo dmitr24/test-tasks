@@ -22,14 +22,11 @@ public class SymbolFrequencyHistogramBuilder {
         return histogram;
     }
 
-    public void append(String line) {
-        char[] chars = line.toCharArray();
-        for (char character : chars) {
-            if (symbolCount.containsKey(character)) {
-                symbolCount.put(character, symbolCount.get(character) + 1);
-            } else {
-                symbolCount.put(character, 1);
-            }
+    public void append(char newChar) {
+        if (symbolCount.containsKey(newChar)) {
+                symbolCount.put(newChar, symbolCount.get(newChar) + 1);
+        } else {
+            symbolCount.put(newChar, 1);
         }
     }
 

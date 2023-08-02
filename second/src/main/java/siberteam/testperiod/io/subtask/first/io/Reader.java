@@ -10,12 +10,14 @@ import java.util.function.Consumer;
 public class Reader {
     private final String path;
 
-    public void readToBuilder(Consumer<String> buildMethod) {
+    public void readToBuilder(Consumer<Character> buildMethod) {
         try (BufferedReader reader = new BufferedReader(new FileReader(path))) {
-            String newLine = reader.readLine();
-            while (newLine != null) {
-                buildMethod.accept(newLine);
-                newLine = reader.readLine();
+            int newChar = (char) reader.read();
+            while (newChar != -1) {
+                if (newChar != '\n') {
+                    buildMethod.accept((char) newChar);
+                }
+                newChar =  reader.read();
             }
         } catch (IOException e) {
             throw new RuntimeException(e);
