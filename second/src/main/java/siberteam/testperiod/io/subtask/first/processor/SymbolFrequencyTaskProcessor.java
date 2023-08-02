@@ -24,7 +24,6 @@ public class SymbolFrequencyTaskProcessor {
             writeResult(result);
         } catch (IOException exception) {
             System.err.println(exception.getMessage());
-            System.exit(1);
         }
     }
 
