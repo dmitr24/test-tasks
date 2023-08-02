@@ -2,9 +2,8 @@ package siberteam.testperiod.io.subtask.first.processor;
 
 import siberteam.testperiod.io.subtask.common.io.FileWriter;
 import siberteam.testperiod.io.subtask.first.domain.SymbolFrequencyHistogramBuilder;
+import siberteam.testperiod.io.subtask.first.io.Reader;
 import siberteam.testperiod.io.subtask.first.parser.HistogramParser;
-import java.io.BufferedReader;
-import java.io.FileReader;
 import java.io.IOException;
 import java.util.Map;
 
@@ -21,9 +20,8 @@ public class SymbolFrequencyTaskProcessor {
     public void process(String targetFileLocation) {
         try {
             Map<Character, Float> histogramData = getEachSymbolFrequencyFromText(targetFileLocation);
-            String output = histogramParser.parseHistogram(histogramData);
-            FileWriter writer = new FileWriter(OUTPUT_DIRECTORY);
-            writer.write(output);
+            String result = histogramParser.parseHistogram(histogramData);
+            writeResult(result);
         } catch (IOException exception) {
             System.err.println(exception.getMessage());
             System.exit(1);
@@ -31,13 +29,13 @@ public class SymbolFrequencyTaskProcessor {
     }
 
     private Map<Character, Float> getEachSymbolFrequencyFromText(String path) throws IOException {
-        try (BufferedReader reader = new BufferedReader(new FileReader(path))) {
-            String newLine = reader.readLine();
-            while (newLine != null) {
-                histogramBuilder.append(newLine);
-                newLine = reader.readLine();
-            }
-            return histogramBuilder.build();
-        }
+        Reader reader = new Reader(path);
+        reader.readToBuilder(histogramBuilder::append);
+        return histogramBuilder.build();
+    }
+
+    private void writeResult(String result) throws IOException {
+        FileWriter writer = new FileWriter(OUTPUT_DIRECTORY);
+        writer.write(result);
     }
 }
