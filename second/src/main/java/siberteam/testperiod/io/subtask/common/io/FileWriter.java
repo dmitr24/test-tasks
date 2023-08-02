@@ -11,13 +11,13 @@ public class FileWriter {
     private final String location;
 
     public void write(String text) throws IOException {
-        Path filePath = getAcceptableFileName();
+        Path filePath = Paths.get(location + "/output.txt");
+        prepareFile(filePath);
         writeToParticularFile(filePath, text);
     }
 
     private void writeToParticularFile(Path filePath, String text) throws IOException {
         try {
-            Files.createFile(filePath);
             if (Files.isWritable(filePath)) {
                 Files.write(filePath, text.getBytes());
             } else {
@@ -28,15 +28,10 @@ public class FileWriter {
         }
     }
 
-    private Path getAcceptableFileName() {
-        Path path = null;
-        for (int i = 1; i < Integer.MAX_VALUE; i++) {
-            String fileName = location + "output-" + i + ".txt";
-            path = Paths.get(fileName);
-            if (!Files.exists(path)) {
-                break;
-            }
+    private void prepareFile(Path filePath) throws IOException {
+        if (Files.exists(filePath)) {
+            Files.delete(filePath);
         }
-        return path;
+        Files.createFile(filePath);
     }
 }

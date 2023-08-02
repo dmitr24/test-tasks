@@ -1,6 +1,8 @@
 package siberteam.testperiod.io.subtask.common.data;
 
 import lombok.RequiredArgsConstructor;
+
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -17,7 +19,7 @@ public class Text {
         return Stream.of(content.split(""))
                 .map(stringLetter -> {
                     try {
-                        return Character.valueOf(stringLetter.charAt(0));
+                        return stringLetter.charAt(0);
                     } catch (IndexOutOfBoundsException exception) {
                         return null;
                     }
@@ -25,7 +27,18 @@ public class Text {
                 .distinct()
                 .collect(Collectors.toList());
     }
-    /// todo
+
+    public List<Character> getDistinctLettersWithoutStream() {
+        char[] chars = content.toCharArray();
+        List<Character> distinctLetters = new ArrayList<>();
+        for (char character : chars) {
+            if (!distinctLetters.contains(character)) {
+                distinctLetters.add(character);
+            }
+        }
+        return distinctLetters;
+    }
+
     public Stream<String> getNotEmptyWords() {
         return Stream.of(content.split("[\n ]"))
                 .filter(str -> str.length() > 0);
