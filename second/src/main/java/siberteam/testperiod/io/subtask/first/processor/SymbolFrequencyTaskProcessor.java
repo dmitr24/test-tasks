@@ -28,7 +28,7 @@ public class SymbolFrequencyTaskProcessor {
         }
     }
 
-    private Map<Character, Float> getEachSymbolFrequencyFromText(String path) throws IOException {
+    private Map<Character, Float> getEachSymbolFrequencyFromText(String path) {
         Reader reader = new Reader(path);
         reader.readToBuilder(histogramBuilder::append);
         return histogramBuilder.build();
