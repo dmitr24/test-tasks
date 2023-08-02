@@ -1,7 +1,6 @@
 package siberteam.testperiod.io.subtask.first.io;
 
 import lombok.RequiredArgsConstructor;
-
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
