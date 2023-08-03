@@ -8,7 +8,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 @RequiredArgsConstructor
-public class FileWriter implements Writer {
+public class FileWriter implements Writer<String> {
     private final String location;
 
     public void write(String text) throws WriterException {
