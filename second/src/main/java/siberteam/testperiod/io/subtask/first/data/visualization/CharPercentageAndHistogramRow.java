@@ -7,6 +7,6 @@ import lombok.Setter;
 @Setter
 public class CharPercentageAndHistogramRow {
     private Character symbol;
-    private Integer count;
+    private Long count;
     private Float percentage;
 }

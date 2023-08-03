@@ -6,27 +6,19 @@ import java.util.List;
 import java.util.Map;
 
 public class CharPercentageAndHistogramRowsMapper {
-    public List<CharPercentageAndHistogramRow> map(Map<Character, Integer> charCount) {
+    public List<CharPercentageAndHistogramRow> map(Map<Character, Long> charCount,
+                                                   long totalChars) {
         List<CharPercentageAndHistogramRow> rows = new ArrayList<>(charCount.size());
-        int totalSymbols = getTotalSymbols(charCount);
-        if (totalSymbols == 0) {
+        if (totalChars == 0) {
             return rows;
         }
-        for (Map.Entry<Character, Integer> entry : charCount.entrySet()) {
+        for (Map.Entry<Character, Long> entry : charCount.entrySet()) {
             CharPercentageAndHistogramRow row = new CharPercentageAndHistogramRow();
             row.setSymbol(entry.getKey());
             row.setCount(entry.getValue());
-            row.setPercentage(((float) entry.getValue() * 100) / totalSymbols);
+            row.setPercentage(((float) entry.getValue() * 100) / totalChars);
             rows.add(row);
         }
         return rows;
-    }
-
-    private int getTotalSymbols(Map<Character, Integer> entries) {
-        int totalSymbols = 0;
-        for (int charEntriesCount : entries.values()) {
-            totalSymbols += charEntriesCount;
-        }
-        return totalSymbols;
     }
 }

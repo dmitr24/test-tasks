@@ -23,7 +23,8 @@ public class CharStatisticsProcessor {
     public void process() {
         try {
             reader.readToBuffer(charCountBuffer::append);
-            List<CharPercentageAndHistogramRow> data = dataMapper.map(charCountBuffer.getActualState());
+            List<CharPercentageAndHistogramRow> data =
+                    dataMapper.map(charCountBuffer.getActualState(), charCountBuffer.getTotalCharsCount());
             String result = visualizer.visualize(data);
             writer.write(result);
         } catch (WriterException exception) {
