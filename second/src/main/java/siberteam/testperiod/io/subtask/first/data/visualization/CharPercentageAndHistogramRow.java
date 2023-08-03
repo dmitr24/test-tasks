@@ -1,11 +1,11 @@
-package siberteam.testperiod.io.subtask.first.data;
+package siberteam.testperiod.io.subtask.first.data.visualization;
 
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
-public class SymbolPercentageAndHistogramRow {
+public class CharPercentageAndHistogramRow {
     private Character symbol;
     private Integer count;
     private Float percentage;

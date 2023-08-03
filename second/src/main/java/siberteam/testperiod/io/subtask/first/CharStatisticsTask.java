@@ -2,6 +2,9 @@ package siberteam.testperiod.io.subtask.first;
 
 import siberteam.testperiod.io.subtask.common.validator.FileValidator;
 import siberteam.testperiod.io.subtask.first.buffer.CharCountBuffer;
+import siberteam.testperiod.io.subtask.first.data.mapper.CharPercentageAndHistogramRowsMapper;
+import siberteam.testperiod.io.subtask.first.data.mapper.DataMapper;
+import siberteam.testperiod.io.subtask.first.data.visualization.CharPercentageAndHistogramRow;
 import siberteam.testperiod.io.subtask.first.io.reader.FileReader;
 import siberteam.testperiod.io.subtask.first.io.reader.Reader;
 import siberteam.testperiod.io.subtask.first.io.writer.FileWriter;
@@ -9,6 +12,8 @@ import siberteam.testperiod.io.subtask.first.io.writer.Writer;
 import siberteam.testperiod.io.subtask.first.processor.ConsecutiveCharStatisticsProcessor;
 import siberteam.testperiod.io.subtask.first.visualizer.SortedCharPercentageAndHistogramVisualizer;
 import siberteam.testperiod.io.subtask.first.visualizer.Visualizer;
+
+import java.util.List;
 
 public class CharStatisticsTask {
     private static final String OUTPUT_DIRECTORY = "/home/dmitryk/projects/main/second/src/main/resources/first";
@@ -34,10 +39,13 @@ public class CharStatisticsTask {
     private static void processFile(String fileLocation) {
         Reader reader = new FileReader(fileLocation);
         Writer<String> writer = new FileWriter(OUTPUT_DIRECTORY);
-        Visualizer<String> visualizer = new SortedCharPercentageAndHistogramVisualizer('#');
+        DataMapper<List<CharPercentageAndHistogramRow>> dataMapper =
+                new CharPercentageAndHistogramRowsMapper();
+        Visualizer<String, List<CharPercentageAndHistogramRow>> visualizer =
+                new SortedCharPercentageAndHistogramVisualizer('#');
         CharCountBuffer symbolCountBuffer = new CharCountBuffer();
-        ConsecutiveCharStatisticsProcessor<String> taskProcessor =
-                new ConsecutiveCharStatisticsProcessor<>(symbolCountBuffer, visualizer, reader, writer);
+        ConsecutiveCharStatisticsProcessor<String, List<CharPercentageAndHistogramRow>> taskProcessor =
+                new ConsecutiveCharStatisticsProcessor<>(symbolCountBuffer, dataMapper, visualizer, reader, writer);
         taskProcessor.process();
     }
 }
