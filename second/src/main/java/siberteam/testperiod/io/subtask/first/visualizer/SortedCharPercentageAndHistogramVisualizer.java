@@ -6,8 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @RequiredArgsConstructor
-public class SortedCharPercentageAndHistogramVisualizer implements
-        Visualizer<String, List<CharPercentageAndHistogramRow>> {
+public class SortedCharPercentageAndHistogramVisualizer {
     private final char entryPercentSign;
 
     public String visualize(List<CharPercentageAndHistogramRow> rows) {

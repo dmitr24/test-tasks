@@ -2,27 +2,29 @@ package siberteam.testperiod.io.subtask.first.processor;
 
 import lombok.RequiredArgsConstructor;
 import siberteam.testperiod.io.subtask.first.buffer.CharCountBuffer;
-import siberteam.testperiod.io.subtask.first.data.mapper.DataMapper;
+import siberteam.testperiod.io.subtask.first.data.mapper.CharPercentageAndHistogramRowsMapper;
+import siberteam.testperiod.io.subtask.first.data.visualization.CharPercentageAndHistogramRow;
 import siberteam.testperiod.io.subtask.first.exception.CharProcessorException;
 import siberteam.testperiod.io.subtask.first.exception.ReaderException;
 import siberteam.testperiod.io.subtask.first.exception.WriterException;
-import siberteam.testperiod.io.subtask.first.io.reader.Reader;
-import siberteam.testperiod.io.subtask.first.io.writer.Writer;
-import siberteam.testperiod.io.subtask.first.visualizer.Visualizer;
+import siberteam.testperiod.io.subtask.first.io.FileReader;
+import siberteam.testperiod.io.subtask.first.io.FileWriter;
+import siberteam.testperiod.io.subtask.first.visualizer.SortedCharPercentageAndHistogramVisualizer;
+import java.util.List;
 
 @RequiredArgsConstructor
-public class ConsecutiveCharStatisticsProcessor<R, T> {
+public class CharStatisticsProcessor {
     private final CharCountBuffer charCountBuffer;
-    private final DataMapper<T> dataMapper;
-    private final Visualizer<R, T> visualizer;
-    private final Reader reader;
-    private final Writer<R> writer;
+    private final CharPercentageAndHistogramRowsMapper dataMapper;
+    private final SortedCharPercentageAndHistogramVisualizer visualizer;
+    private final FileReader reader;
+    private final FileWriter writer;
 
     public void process() {
         try {
             reader.readToBuffer(charCountBuffer::append);
-            T data = dataMapper.map(charCountBuffer.getActualState());
-            R result = visualizer.visualize(data);
+            List<CharPercentageAndHistogramRow> data = dataMapper.map(charCountBuffer.getActualState());
+            String result = visualizer.visualize(data);
             writer.write(result);
         } catch (WriterException exception) {
             System.err.println(exception.getMessage());

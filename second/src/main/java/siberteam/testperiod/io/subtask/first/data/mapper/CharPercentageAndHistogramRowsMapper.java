@@ -5,8 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class CharPercentageAndHistogramRowsMapper implements
-        DataMapper<List<CharPercentageAndHistogramRow>> {
+public class CharPercentageAndHistogramRowsMapper {
     public List<CharPercentageAndHistogramRow> map(Map<Character, Integer> charCount) {
         List<CharPercentageAndHistogramRow> rows = new ArrayList<>(charCount.size());
         int totalSymbols = getTotalSymbols(charCount);

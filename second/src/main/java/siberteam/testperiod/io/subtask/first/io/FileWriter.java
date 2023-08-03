@@ -1,4 +1,4 @@
-package siberteam.testperiod.io.subtask.first.io.writer;
+package siberteam.testperiod.io.subtask.first.io;
 
 import lombok.RequiredArgsConstructor;
 import siberteam.testperiod.io.subtask.first.exception.WriterException;
@@ -8,7 +8,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 @RequiredArgsConstructor
-public class FileWriter implements Writer<String> {
+public class FileWriter {
     private final String location;
 
     public void write(String text) throws WriterException {
