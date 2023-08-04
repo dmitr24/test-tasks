@@ -1,24 +1,14 @@
 package siberteam.testperiod.io.subtask.second.cli;
 
 import org.apache.commons.cli.*;
-import siberteam.testperiod.io.subtask.second.data.request.HelpRequest;
-import siberteam.testperiod.io.subtask.second.data.request.SortRequest;
-import siberteam.testperiod.io.subtask.second.data.request.UserRequest;
-import siberteam.testperiod.io.subtask.second.exception.ParserException;
+import siberteam.testperiod.io.subtask.second.data.UserRequest;
 
 public class CliParser {
-    private final Option fileNameOption;
-    private final Option outputDirectoryOption;
-    private final Option sorterNameOption;
-    private final Option helpOption;
+    private final Option fileNameOption = new Option("i", true, "FileName for parsing");
+    private final Option outputDirectoryOption = new Option("o", true, "Directory which contains file");
+    private final Option sorterNameOption = new Option("s", true, "Sorting class");
+    private final Option helpOption = new Option("h", "help", false, "Info about sorters");
     private CommandLine commandLine;
-
-    public CliParser() {
-        fileNameOption = new Option("i", true, "FileName for parsing");
-        outputDirectoryOption = new Option("o", true, "Directory which contains file");
-        sorterNameOption = new Option("s", true, "Sorting class");
-        helpOption = new Option("h", "help", false, "Info about sorters");
-    }
 
     private Options getOptionsList() {
         Options options = new Options();
@@ -29,51 +19,52 @@ public class CliParser {
         return options;
     }
 
-    public UserRequest parse(String[] args) throws ParserException {
+    public UserRequest parse(String[] args) {
         initCommandLine(args);
-        if (containsHelpOption()) {
-            return new HelpRequest();
-        } else {
-            return getSortRequest();
-        }
+        return getRequest();
     }
 
-    private void initCommandLine(String[] args) throws ParserException {
+    private void initCommandLine(String[] args) {
         try {
             Options options = getOptionsList();
             CommandLineParser parser = new DefaultParser();
             commandLine = parser.parse(options, args);
         } catch (ParseException exception) {
-            throw new ParserException("Parser exception occurred. opts don't fit restrictions." +
+            throw new RuntimeException("Parser exception occurred. opts don't fit restrictions." +
                     " Message: " + exception.getMessage());
         }
     }
 
-    private SortRequest getSortRequest() throws ParserException {
-        SortRequest sortRequest = new SortRequest();
-        sortRequest.setFileName(getFileName());
-        sortRequest.setOutputDir(getDirectoryName());
-        sortRequest.setSorterName(getSorterName());
-        return sortRequest;
+    private UserRequest getRequest() {
+        UserRequest userRequest = new UserRequest();
+        if (containsHelpOption()) {
+            userRequest.setHelpRequest(true);
+        } else {
+            userRequest.setHelpRequest(false);
+            userRequest.setFileName(getFileName());
+            userRequest.setOutputDir(getDirectoryName());
+            userRequest.setSorterName(getSorterName());
+        }
+        return userRequest;
     }
 
-    private String getFileName() throws ParserException {
+    private String getFileName() {
         if (!commandLine.hasOption(fileNameOption)) {
-            throw new ParserException("-i opt is required. See -h or -help for all necessary information.");
+            throw new RuntimeException("-i opt is required. See -h or -help for all necessary information.");
         }
         return commandLine.getOptionValue(fileNameOption);
     }
 
-    private String getDirectoryName() throws ParserException {
+    private String getDirectoryName() {
         if (!commandLine.hasOption(outputDirectoryOption)) {
-            throw new ParserException("-o opt is required. See -h or -help for all necessary information.");
+            throw new RuntimeException("-o opt is required. See -h or -help for all necessary information.");
         }
         return commandLine.getOptionValue(outputDirectoryOption);
     }
 
-    private String getSorterName() throws ParserException {
+    private String getSorterName() {
         if (!commandLine.hasOption(sorterNameOption)) {
-            throw new ParserException("-s opt is required. See -h or -help for all necessary information.");
+            throw new RuntimeException("-s opt is required. See -h or -help for all necessary information.");
         }
         return commandLine.getOptionValue(sorterNameOption);
     }

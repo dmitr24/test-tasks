@@ -1,8 +1,6 @@
 package siberteam.testperiod.io.subtask.second.io;
 
 import siberteam.testperiod.io.subtask.common.validator.FileValidator;
-import siberteam.testperiod.io.subtask.second.exception.ReaderException;
-import siberteam.testperiod.io.subtask.second.exception.ValidationException;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -11,15 +9,15 @@ import java.util.List;
 public class FileReader {
     private final String path;
 
-    public FileReader(String path) throws ValidationException {
+    public FileReader(String path) {
         FileValidator validator = new FileValidator();
         if (!validator.validate(path)) {
-            throw new ValidationException("File with such name not found");
+            throw new RuntimeException("File with such name not found");
         }
         this.path = path;
     }
 
-    public List<String> getDistinctWords() throws ReaderException {
+    public List<String> getDistinctWords() {
         try (BufferedReader reader = new BufferedReader(new java.io.FileReader(path))) {
             List<String> words = new ArrayList<>();
             int newChar = reader.read();
@@ -41,7 +39,7 @@ public class FileReader {
             }
             return words;
         } catch (IOException e) {
-            throw new ReaderException("Exception while reading from file: " + path);
+            throw new RuntimeException("Exception while reading from file: " + path);
         }
     }
 }

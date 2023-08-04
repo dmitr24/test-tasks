@@ -3,7 +3,6 @@ package siberteam.testperiod.io.subtask.second.factory;
 import lombok.Getter;
 import siberteam.testperiod.io.subtask.second.annotation.SorterInfo;
 import siberteam.testperiod.io.subtask.second.data.SorterData;
-import siberteam.testperiod.io.subtask.second.exception.SorterFactoryException;
 import siberteam.testperiod.io.subtask.second.sorter.Sorter;
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -17,10 +16,9 @@ public class SorterFactory {
     private static final String PACKAGE_NAME = "siberteam/testperiod/io/subtask/second/sorter";
 
     @Getter
-    private final Set<SorterData> sortersData;
+    private final Set<SorterData> sortersData = new HashSet<>();
 
-    public SorterFactory() throws SorterFactoryException {
-        this.sortersData = new HashSet<>();
+    public SorterFactory() {
         Set<Class<?>> sorters = loadClasses();
         sorters.forEach(this::buildSorterData);
     }
@@ -36,21 +34,21 @@ public class SorterFactory {
         sortersData.add(sorterData);
     }
 
-    public Sorter getInstance(String className) throws SorterFactoryException {
+    public Sorter getInstance(String className) {
         for (SorterData sorter : sortersData) {
             if (sorter.getFullQualifiedClassName().equals(className)) {
                 try {
                     return (Sorter) sorter.getClassReference().newInstance();
                 } catch (InstantiationException | IllegalAccessException exception) {
-                    throw new SorterFactoryException("Exception in sorter factory. Message: " +
+                    throw new RuntimeException("Exception in sorter factory. Message: " +
                             exception.getMessage());
                 }
             }
         }
-        throw new SorterFactoryException("Sorter not found");
+        throw new RuntimeException("Sorter not found");
     }
 
-    private Set<Class<?>> loadClasses() throws SorterFactoryException {
+    private Set<Class<?>> loadClasses() {
         try (InputStream stream = ClassLoader.getSystemClassLoader()
                 .getResourceAsStream(PACKAGE_NAME)) {
             if (stream == null) {
@@ -68,17 +66,17 @@ public class SorterFactory {
                 return classes;
             }
         } catch (IOException exception) {
-            throw new SorterFactoryException("Unable to get package filenames. Message: " + exception.getMessage());
+            throw new RuntimeException("Unable to get package filenames. Message: " + exception.getMessage());
         }
     }
 
-    private Class<?> getClass(String className) throws SorterFactoryException {
+    private Class<?> getClass(String className) {
         try {
             return Class.forName(PACKAGE_NAME.replace("/", ".") + "."
                     + className.replace(".class", ""));
         } catch (ClassNotFoundException e) {
             System.err.println("Class not found: " + className);
-            throw  new SorterFactoryException("Class not found: " + className);
+            throw  new RuntimeException("Class not found: " + className);
         }
     }
 }

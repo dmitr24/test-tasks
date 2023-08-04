@@ -1,40 +1,46 @@
 package siberteam.testperiod.io.subtask.second;
 
 import siberteam.testperiod.io.subtask.second.cli.CliParser;
-import siberteam.testperiod.io.subtask.second.data.request.HelpRequest;
-import siberteam.testperiod.io.subtask.second.data.request.SortRequest;
-import siberteam.testperiod.io.subtask.second.data.request.UserRequest;
-import siberteam.testperiod.io.subtask.second.exception.*;
-import siberteam.testperiod.io.subtask.second.handler.HelpRequestHandler;
-import siberteam.testperiod.io.subtask.second.handler.SortRequestHandler;
+import siberteam.testperiod.io.subtask.second.data.UserRequest;
 import siberteam.testperiod.io.subtask.second.factory.SorterFactory;
 import siberteam.testperiod.io.subtask.second.io.FileReader;
 import siberteam.testperiod.io.subtask.second.io.FileWriter;
+import java.util.List;
 
 public class SortingTask {
+    private static final SorterFactory sorterFactory = new SorterFactory();
+
     public static void main(String[] args) {
         try {
             CliParser parser = new CliParser();
             UserRequest userRequest = parser.parse(args);
-            SorterFactory sorterFactory = new SorterFactory();
-            if (userRequest instanceof HelpRequest) {
-                HelpRequestHandler helpRequestHandler = new HelpRequestHandler(sorterFactory);
-                helpRequestHandler.handle();
-            } else if (userRequest instanceof SortRequest) {
-                SortRequest sortRequest = (SortRequest) userRequest;
-                FileReader fileReader = new FileReader(sortRequest.getFileName());
-                FileWriter fileWriter = new FileWriter(sortRequest.getOutputDir());
-                SortRequestHandler sortRequestHandler =
-                        new SortRequestHandler(fileReader, sorterFactory, fileWriter);
-                sortRequestHandler.handle(sortRequest);
+            if (userRequest.isHelpRequest()) {
+                printHelp();
             } else {
-                System.err.println("Unexpected user request occurred");
-                System.exit(1);
+                applySort(userRequest);
             }
-        } catch (ParserException | ValidationException | SorterFactoryException |
-                 WriterException | ReaderException exception) {
+        } catch (RuntimeException exception) {
             System.err.println(exception.getMessage());
             System.exit(1);
         }
+    }
+
+    private static void printHelp() {
+        System.out.println(">>> Example of valid command to start provided below\n" +
+                "java -jar sorter.jar -i input.txt " +
+                "-o output-folder " +
+                "-s siberteam.testperiod.io.subtask.second.sorter.AlphabetSorter\n");
+        System.out.println(">>> Available sorters");
+        sorterFactory.getSortersData().forEach(System.out::println);
+    }
+
+    private static void applySort(UserRequest userRequest) {
+        FileReader reader = new FileReader(userRequest.getFileName());
+        FileWriter writer = new FileWriter(userRequest.getOutputDir());
+        List<String> words = reader.getDistinctWords();
+        List<String> sortedWords = sorterFactory
+                .getInstance(userRequest.getSorterName())
+                .sort(words);
+        writer.write(String.join("\n", sortedWords));
     }
 }

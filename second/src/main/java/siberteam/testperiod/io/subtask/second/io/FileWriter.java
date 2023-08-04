@@ -1,7 +1,6 @@
 package siberteam.testperiod.io.subtask.second.io;
 
 import lombok.RequiredArgsConstructor;
-import siberteam.testperiod.io.subtask.second.exception.WriterException;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -11,13 +10,13 @@ import java.nio.file.Paths;
 public class FileWriter {
     private final String location;
 
-    public void write(String text) throws WriterException {
+    public void write(String text) {
         Path filePath = Paths.get(location + "/output.txt");
         prepareFile(filePath);
         writeToParticularFile(filePath, text);
     }
 
-    private void writeToParticularFile(Path filePath, String text) throws WriterException {
+    private void writeToParticularFile(Path filePath, String text) {
         try {
             if (Files.isWritable(filePath)) {
                 Files.write(filePath, text.getBytes());
@@ -25,18 +24,18 @@ public class FileWriter {
                 throw new IOException();
             }
         } catch (IOException exception) {
-            throw new WriterException("Unable to write to the file with path " + filePath);
+            throw new RuntimeException("Unable to write to the file with path " + filePath);
         }
     }
 
-    private void prepareFile(Path filePath) throws WriterException {
+    private void prepareFile(Path filePath) {
         try {
             if (Files.exists(filePath)) {
                 Files.delete(filePath);
             }
             Files.createFile(filePath);
         } catch (IOException exception) {
-            throw new WriterException("File preparation exception: " + exception.getMessage());
+            throw new RuntimeException("File preparation exception: " + exception.getMessage());
         }
     }
 }
