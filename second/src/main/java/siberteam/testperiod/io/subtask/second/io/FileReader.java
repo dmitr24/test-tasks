@@ -3,7 +3,6 @@ package siberteam.testperiod.io.subtask.second.io;
 import siberteam.testperiod.io.subtask.common.validator.FileValidator;
 import siberteam.testperiod.io.subtask.second.exception.ReaderException;
 import siberteam.testperiod.io.subtask.second.exception.ValidationException;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -20,7 +19,7 @@ public class FileReader {
         this.path = path;
     }
 
-    public List<String> getWords() throws ReaderException {
+    public List<String> getDistinctWords() throws ReaderException {
         try (BufferedReader reader = new BufferedReader(new java.io.FileReader(path))) {
             List<String> words = new ArrayList<>();
             int newChar = reader.read();

@@ -18,7 +18,7 @@ public class SortRequestHandler {
 
     public void handle(SortRequest sortRequest) throws ReaderException,
             SorterFactoryException, WriterException {
-        List<String> words = reader.getWords();
+        List<String> words = reader.getDistinctWords();
         List<String> sortedWords = sorterFactory
                 .getInstance(sortRequest.getSorterName())
                 .sort(words);
