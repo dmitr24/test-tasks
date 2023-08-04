@@ -11,7 +11,6 @@ public class CliParser {
     private final Option outputDirectoryOption;
     private final Option sorterNameOption;
     private final Option helpOption;
-    private final Options options;
     private CommandLine commandLine;
 
     public CliParser() {
@@ -19,11 +18,15 @@ public class CliParser {
         outputDirectoryOption = new Option("o", true, "Directory which contains file");
         sorterNameOption = new Option("s", true, "Sorting class");
         helpOption = new Option("h", "help", false, "Info about sorters");
-        options = new Options();
+    }
+
+    private Options getOptionsList() {
+        Options options = new Options();
         options.addOption(fileNameOption);
         options.addOption(outputDirectoryOption);
         options.addOption(sorterNameOption);
         options.addOption(helpOption);
+        return options;
     }
 
     public UserRequest parse(String[] args) throws ParserException {
@@ -37,6 +40,7 @@ public class CliParser {
 
     private void initCommandLine(String[] args) throws ParserException {
         try {
+            Options options = getOptionsList();
             CommandLineParser parser = new DefaultParser();
             commandLine = parser.parse(options, args);
         } catch (ParseException exception) {
