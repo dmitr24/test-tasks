@@ -1,0 +1,14 @@
+bbb
+abc
+dddd
+abaaaaa
+aabbbbb
+aaaaaaaa
+acaaaaaa
+siberteam.testperiod.io.subtask.second.sorter.AlphabetSorter
+siberteam.testperiod.io.subtask.second.sorter.BlphabetSorter
+siberteam.testperiod.io.subtask.second.sorter.WordLengthSorter
+siberteam.testperiod.io.subtask.second.sorter.ReversedAlphabetSorter
+siberteam.testperiod.io.subtask.second.sorter.RaversedAlphabetSorter
+siberteam.testperiod.io.subtask.second.sorter.BiggestASCIISymbolSorter
+siberteam.testperiod.io.subtask.second.sorter.UniqueLettersCountsSorter

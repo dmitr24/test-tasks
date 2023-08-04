@@ -1,7 +1,7 @@
 package siberteam.testperiod.io.subtask.second.sorter;
 
-import siberteam.testperiod.io.subtask.common.data.Text;
+import java.util.List;
 
 public interface Sorter {
-    String sort(Text text);
+    List<String> sort(List<String> words);
 }

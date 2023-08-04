@@ -1,19 +1,16 @@
 package siberteam.testperiod.io.subtask.second.sorter;
 
-import siberteam.testperiod.io.subtask.common.data.Text;
 import siberteam.testperiod.io.subtask.second.annotation.SorterInfo;
-import java.util.stream.Collectors;
 
-@SuppressWarnings("unused")
+import java.util.List;
+
 @SorterInfo(name = "ASCII biggest letter sorter",
         description = "Sorting words by biggest containing ASCII character")
 public class BiggestASCIISymbolSorter implements Sorter {
     @Override
-    public String sort(Text text) {
-        return text
-                .getNotEmptyWords()
-                .sorted(this::compareStrings)
-                .collect(Collectors.joining("\n"));
+    public List<String> sort(List<String> words) {
+        words.sort(this::compareStrings);
+        return words;
     }
 
     private int compareStrings(String left, String right) {

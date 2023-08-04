@@ -1,20 +1,16 @@
 package siberteam.testperiod.io.subtask.second.sorter;
 
-import siberteam.testperiod.io.subtask.common.data.Text;
 import siberteam.testperiod.io.subtask.second.annotation.SorterInfo;
-import java.util.stream.Collectors;
+import java.util.List;
 
-@SuppressWarnings("unused")
 @SorterInfo(name = "Reversed alphabet sorter",
         description = "Sorting like alphabet sort, but reverse each word before comparing")
 public class ReversedAlphabetSorter implements Sorter {
     @Override
-    public String sort(Text text) {
-        return text
-                .getNotEmptyWords()
-                .map(this::reverseString)
-                .sorted()
-                .collect(Collectors.joining("\n"));
+    public List<String> sort(List<String> words) {
+        words.replaceAll(this::reverseString);
+        words.sort(String::compareTo);
+        return words;
     }
 
     private String reverseString(String str) {

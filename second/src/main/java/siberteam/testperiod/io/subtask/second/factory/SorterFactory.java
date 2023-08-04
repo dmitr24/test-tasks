@@ -1,8 +1,10 @@
-package siberteam.testperiod.io.subtask.second.sorter;
+package siberteam.testperiod.io.subtask.second.factory;
 
 import lombok.Getter;
 import siberteam.testperiod.io.subtask.second.annotation.SorterInfo;
 import siberteam.testperiod.io.subtask.second.data.SorterData;
+import siberteam.testperiod.io.subtask.second.exception.SorterFactoryException;
+import siberteam.testperiod.io.subtask.second.sorter.Sorter;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -10,7 +12,6 @@ import java.io.InputStreamReader;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 public class SorterFactory {
     private static final String PACKAGE_NAME = "siberteam/testperiod/io/subtask/second/sorter";
@@ -18,15 +19,10 @@ public class SorterFactory {
     @Getter
     private final Set<SorterData> sortersData;
 
-    public SorterFactory() {
+    public SorterFactory() throws SorterFactoryException {
         this.sortersData = new HashSet<>();
-    }
-
-    public void build() {
         Set<Class<?>> sorters = loadClasses();
-        if (sorters != null) {
-            sorters.forEach(this::buildSorterData);
-        }
+        sorters.forEach(this::buildSorterData);
     }
 
     private void buildSorterData(Class<?> sorterClass) {
@@ -40,40 +36,49 @@ public class SorterFactory {
         sortersData.add(sorterData);
     }
 
-    public Sorter getInstance(String className) throws InstantiationException, IllegalAccessException {
+    public Sorter getInstance(String className) throws SorterFactoryException {
         for (SorterData sorter : sortersData) {
             if (sorter.getFullQualifiedClassName().equals(className)) {
-                return (Sorter) sorter.getClassReference().newInstance();
+                try {
+                    return (Sorter) sorter.getClassReference().newInstance();
+                } catch (InstantiationException | IllegalAccessException exception) {
+                    throw new SorterFactoryException("Exception in sorter factory. Message: " +
+                            exception.getMessage());
+                }
             }
         }
-        return null;
+        throw new SorterFactoryException("Sorter not found");
     }
 
-    private Set<Class<?>> loadClasses() {
+    private Set<Class<?>> loadClasses() throws SorterFactoryException {
         try (InputStream stream = ClassLoader.getSystemClassLoader()
                 .getResourceAsStream(PACKAGE_NAME)) {
             if (stream == null) {
                 return Collections.emptySet();
             }
             try (BufferedReader reader = new BufferedReader(new InputStreamReader(stream))) {
-                return reader.lines()
-                        .filter(line -> line.endsWith(".class") && !line.startsWith("Sorter"))
-                        .map(this::getClass)
-                        .collect(Collectors.toSet());
+                Set<Class<?>> classes = new HashSet<>();
+                String line = reader.readLine();
+                while (line != null) {
+                    if (line.endsWith(".class") && !line.startsWith("Sorter")) {
+                        classes.add(getClass(line));
+                    }
+                    line = reader.readLine();
+                }
+                return classes;
             }
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+        } catch (IOException exception) {
+            throw new SorterFactoryException("Unable to get package filenames. Message: " + exception.getMessage());
         }
     }
 
-    private Class<?> getClass(String className) {
+    private Class<?> getClass(String className) throws SorterFactoryException {
         try {
             return Class.forName(PACKAGE_NAME.replace("/", ".") + "."
                     + className.replace(".class", ""));
         } catch (ClassNotFoundException e) {
             System.err.println("Class not found: " + className);
-            System.exit(1);
+            throw  new SorterFactoryException("Class not found: " + className);
         }
-        return null;
     }
 }
