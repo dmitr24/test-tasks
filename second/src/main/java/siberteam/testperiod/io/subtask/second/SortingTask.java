@@ -36,11 +36,11 @@ public class SortingTask {
 
     private static void applySort(UserRequest userRequest) {
         FileReader reader = new FileReader(userRequest.getFileName());
-        FileWriter writer = new FileWriter(userRequest.getOutputDir());
         List<String> words = reader.getDistinctWords();
         List<String> sortedWords = sorterFactory
                 .getInstance(userRequest.getSorterName())
                 .sort(words);
+        FileWriter writer = new FileWriter(userRequest.getOutputDir());
         writer.write(String.join("\n", sortedWords));
     }
 }
