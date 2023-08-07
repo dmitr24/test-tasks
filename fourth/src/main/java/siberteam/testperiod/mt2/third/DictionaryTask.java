@@ -34,7 +34,7 @@ public class DictionaryTask {
         CompletableFuture
                 .allOf(dictionaries)
                 .thenApply((nth) -> sortDictionary(words))
-                .thenAcceptAsync(DictionaryTask::write)
+                .thenAccept(DictionaryTask::write)
                 .get();
     }
 
