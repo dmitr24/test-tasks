@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
-@SorterInfo(name = "Unique letters sorter", description = "Sorting by сщгте ща гтшйгу дуееукы шт цщкв")
+@SorterInfo(name = "Unique letters sorter", description = "Sorting by unique letters count")
 public class UniqueLettersCountsSorter implements Sorter {
     @Override
     public List<String> sort(List<String> words) {

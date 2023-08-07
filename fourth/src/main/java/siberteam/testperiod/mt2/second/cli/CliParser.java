@@ -52,8 +52,10 @@ public class CliParser {
             userRequest.setHelpRequest(false);
             userRequest.setFileName(getFileName());
             userRequest.setOutputDir(getDirectoryName());
-            userRequest.setSorterName(getSorterName());
             userRequest.setParallelExecutions(getParallelExecutions());
+            if (userRequest.getParallelExecutions() == null) {
+                userRequest.setSorterName(getSorterName());
+            }
         }
         return userRequest;
     }
