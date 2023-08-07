@@ -56,7 +56,11 @@ public class CliParser {
         if (!commandLine.hasOption(paralellOption)) {
             return 2;
         }
-        return Integer.valueOf(commandLine.getOptionValue(paralellOption));
+        int param = Integer.parseInt(commandLine.getOptionValue(paralellOption));
+        if (param < 1) {
+            throw new RuntimeException("-all param have to be bigger then 0");
+        }
+        return param;
     }
 
     private String getFileName() {
