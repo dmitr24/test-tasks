@@ -1,0 +1,3 @@
+/home/dmitryk/projects/main/fourth/src/main/resources/third/file-1.txt
+/home/dmitryk/projects/main/fourth/src/main/resources/third/file-2.txt
+/home/dmitryk/projects/main/fourth/src/main/resources/third/file-3.txt
