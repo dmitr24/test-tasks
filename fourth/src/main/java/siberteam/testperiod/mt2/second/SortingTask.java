@@ -6,7 +6,6 @@ import siberteam.testperiod.mt2.second.factory.SorterFactory;
 import siberteam.testperiod.mt2.second.io.FileReader;
 import siberteam.testperiod.mt2.second.io.FileWriter;
 import siberteam.testperiod.mt2.second.sorter.Sorter;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -44,13 +43,30 @@ public class SortingTask {
         FileReader reader = new FileReader(userRequest.getFileName());
         Set<String> words = reader.getDistinctWords();
         List<String> dictionary = new ArrayList<>(words);
+        if (userRequest.getParallelExecutions() == null) {
+            executeSimple(userRequest, dictionary);
+        } else {
+            executeMultithreading(userRequest, dictionary);
+        }
+    }
+
+    private static void executeSimple(UserRequest userRequest, List<String> dictionary) {
+        List<String> sortedWords = sorterFactory
+                .getInstance(userRequest.getSorterName())
+                .sort(dictionary);
+        FileWriter writer = new FileWriter(userRequest.getOutputDir());
+        writer.write(String.join("\n", sortedWords));
+    }
+
+    private static void executeMultithreading(UserRequest userRequest, List<String> dictionary) {
         ExecutorService executorService =
                 Executors.newFixedThreadPool(userRequest.getParallelExecutions());
         Set<Sorter> allSorters = sorterFactory.getAllInstances();
         for (Sorter sorter : allSorters) {
             executorService.submit(() -> {
-                System.out.println(Thread.currentThread().getName());
-                List<String> sortedWords = sorter.sort(dictionary);
+                System.out.println(Thread.currentThread().getName() + " " + sorter.getClass().getSimpleName());
+                List<String> dictionaryCopy = new ArrayList<>(dictionary);
+                List<String> sortedWords = sorter.sort(dictionaryCopy);
                 FileWriter writer = new FileWriter(userRequest.getOutputDir());
                 writer.write(sorter.getClass().getSimpleName(), String.join("\n", sortedWords));
             });

@@ -8,7 +8,13 @@ public class CliParser {
     private final Option outputDirectoryOption = new Option("o", true, "Directory which contains file");
     private final Option sorterNameOption = new Option("s", true, "Sorting class");
     private final Option helpOption = new Option("h", "help", false, "Info about sorters");
-    private final Option paralellOption = new Option("all", true, "All sorters apply mod");
+    private final Option paralellOption = Option
+            .builder()
+            .option("all")
+            .hasArg()
+            .optionalArg(true)
+            .desc("All sorters apply mod")
+            .build();
 
     private CommandLine commandLine;
 
@@ -54,6 +60,9 @@ public class CliParser {
 
     private Integer getParallelExecutions() {
         if (!commandLine.hasOption(paralellOption)) {
+            return null;
+        }
+        if (commandLine.getOptionValue(paralellOption) == null) {
             return 2;
         }
         int param = Integer.parseInt(commandLine.getOptionValue(paralellOption));
