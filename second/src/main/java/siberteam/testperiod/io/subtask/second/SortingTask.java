@@ -5,7 +5,9 @@ import siberteam.testperiod.io.subtask.second.data.UserRequest;
 import siberteam.testperiod.io.subtask.second.factory.SorterFactory;
 import siberteam.testperiod.io.subtask.second.io.FileReader;
 import siberteam.testperiod.io.subtask.second.io.FileWriter;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 public class SortingTask {
     private static final SorterFactory sorterFactory = new SorterFactory();
@@ -36,10 +38,11 @@ public class SortingTask {
 
     private static void applySort(UserRequest userRequest) {
         FileReader reader = new FileReader(userRequest.getFileName());
-        List<String> words = reader.getDistinctWords();
+        Set<String> words = reader.getDistinctWords();
+        List<String> dictionary = new ArrayList<>(words);
         List<String> sortedWords = sorterFactory
                 .getInstance(userRequest.getSorterName())
-                .sort(words);
+                .sort(dictionary);
         FileWriter writer = new FileWriter(userRequest.getOutputDir());
         writer.write(String.join("\n", sortedWords));
     }

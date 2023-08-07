@@ -1,6 +1,5 @@
 package siberteam.testperiod.io.subtask.second.factory;
 
-import lombok.Getter;
 import siberteam.testperiod.io.subtask.second.annotation.SorterInfo;
 import siberteam.testperiod.io.subtask.second.data.SorterData;
 import siberteam.testperiod.io.subtask.second.sorter.Sorter;
@@ -8,19 +7,19 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 public class SorterFactory {
     private static final String PACKAGE_NAME = "siberteam/testperiod/io/subtask/second/sorter";
-
-    @Getter
-    private final Set<SorterData> sortersData = new HashSet<>();
+    private final Map<String, SorterData> sorters = new HashMap<>();
 
     public SorterFactory() {
-        Set<Class<?>> sorters = loadClasses();
-        sorters.forEach(this::buildSorterData);
+        Set<Class<?>> sorterClasses = loadClasses();
+        sorterClasses.forEach(this::buildSorterData);
+    }
+
+    public Collection<SorterData> getSortersData() {
+        return sorters.values();
     }
 
     private void buildSorterData(Class<?> sorterClass) {
@@ -31,21 +30,7 @@ public class SorterFactory {
             sorterData.setDescription(sorterClass.getAnnotation(SorterInfo.class).description());
         }
         sorterData.setClassReference(sorterClass);
-        sortersData.add(sorterData);
-    }
-
-    public Sorter getInstance(String className) {
-        for (SorterData sorter : sortersData) {
-            if (sorter.getFullQualifiedClassName().equals(className)) {
-                try {
-                    return (Sorter) sorter.getClassReference().newInstance();
-                } catch (InstantiationException | IllegalAccessException exception) {
-                    throw new RuntimeException("Exception in sorter factory. Message: " +
-                            exception.getMessage());
-                }
-            }
-        }
-        throw new RuntimeException("Sorter not found");
+        sorters.put(sorterClass.getName(), sorterData);
     }
 
     private Set<Class<?>> loadClasses() {
@@ -77,6 +62,14 @@ public class SorterFactory {
         } catch (ClassNotFoundException e) {
             System.err.println("Class not found: " + className);
             throw  new RuntimeException("Class not found: " + className);
+        }
+    }
+
+    public Sorter getInstance(String sorterName) {
+        try {
+            return (Sorter) sorters.get(sorterName).getClassReference().newInstance();
+        } catch (InstantiationException | IllegalAccessException exception) {
+            throw new RuntimeException("Unable to make instance of class - " + sorterName);
         }
     }
 }

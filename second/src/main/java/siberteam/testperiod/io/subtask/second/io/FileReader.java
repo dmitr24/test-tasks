@@ -4,7 +4,9 @@ import siberteam.testperiod.io.subtask.common.validator.FileValidator;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class FileReader {
     private final String path;
@@ -17,16 +19,16 @@ public class FileReader {
         this.path = path;
     }
 
-    public List<String> getDistinctWords() {
+    public Set<String> getDistinctWords() {
         try (BufferedReader reader = new BufferedReader(new java.io.FileReader(path))) {
-            List<String> words = new ArrayList<>();
+            Set<String> words = new HashSet<>();
             int newChar = reader.read();
             StringBuilder wordBuilder = new StringBuilder();
             while (newChar != -1) {
                 if (newChar != '\n' && newChar != ' ') {
                     wordBuilder.append((char) newChar);
                 } else {
-                    if (wordBuilder.length() > 0 && !words.contains(wordBuilder.toString())) {
+                    if (wordBuilder.length() > 0) {
                         String word = wordBuilder.toString();
                         words.add(word);
                     }
@@ -34,7 +36,7 @@ public class FileReader {
                 }
                 newChar =  reader.read();
             }
-            if (wordBuilder.length() > 0 && !words.contains(wordBuilder.toString())) {
+            if (wordBuilder.length() > 0) {
                 words.add(wordBuilder.toString());
             }
             return words;
