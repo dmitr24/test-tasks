@@ -26,6 +26,33 @@ public class FileReader {
                 if (newChar != '\n' && newChar != ' ') {
                     wordBuilder.append((char) newChar);
                 } else {
+                    if (wordBuilder.length() >= 0) {
+                        String word = wordBuilder.toString();
+                        words.add(word);
+                    }
+                    wordBuilder = new StringBuilder();
+                }
+                newChar =  reader.read();
+            }
+            if (wordBuilder.length() >= 0) {
+                words.add(wordBuilder.toString());
+            }
+            return words;
+        } catch (IOException e) {
+            throw new RuntimeException("Exception while reading from file: " + path);
+        }
+    }
+
+    public Set<String> getDistinctRussianWords() {
+        try (BufferedReader reader = new BufferedReader(new java.io.FileReader(path))) {
+            Set<String> words = new HashSet<>();
+            int newChar = reader.read();
+            StringBuilder wordBuilder = new StringBuilder();
+            while (newChar != -1) {
+                if ((newChar >= 'а' && newChar <= 'я') ||
+                        (newChar >= 'А' && newChar <= 'Я')) {
+                    wordBuilder.append((char) newChar);
+                } else {
                     if (wordBuilder.length() >= 3) {
                         String word = wordBuilder.toString();
                         words.add(word);

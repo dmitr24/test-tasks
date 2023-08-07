@@ -15,7 +15,7 @@ public class DictionaryTask {
 
     public static void main(String[] args) throws ExecutionException, InterruptedException {
         locations = getLocations(args);
-        Set<String> urls = getUniqueWords(locations.getInputFileLocation());
+        Set<String> urls = getUrls(locations.getInputFileLocation());
         createDictionary(urls);
     }
 
@@ -25,7 +25,7 @@ public class DictionaryTask {
         int i = 0;
         for (String url : urls) {
             dictionaries[i] = CompletableFuture.supplyAsync(() -> {
-                Set<String> newWords = getUniqueWords(url);
+                Set<String> newWords = getRussianWords(url);
                 words.addAll(newWords);
                 return null;
             });
@@ -49,9 +49,14 @@ public class DictionaryTask {
         return sorter.sort(dictionary);
     }
 
-    private static Set<String> getUniqueWords(String fileName) {
+    private static Set<String> getUrls(String fileName) {
         FileReader reader = new FileReader(fileName);
         return reader.getDistinctWords();
+    }
+
+    private static Set<String> getRussianWords(String fileName) {
+        FileReader fileReader = new FileReader(fileName);
+        return fileReader.getDistinctRussianWords();
     }
 
     private static Locations getLocations(String[] args) {
