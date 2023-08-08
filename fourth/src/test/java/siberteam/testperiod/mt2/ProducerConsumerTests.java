@@ -30,17 +30,20 @@ class ProducerConsumerTests {
         ExecutorService executorService = Executors.newSingleThreadExecutor();
 
         Future consumerFuture = executorService.submit(consumer::consume);
+        boolean isDoneBeforePoisonPill = false;
+        boolean isDoneAfterPoisonPill = false;
         try {
             Thread.sleep(100);
-            Assertions.assertFalse(consumerFuture.isDone());
-            Thread.sleep(100);
-            Assertions.assertFalse(consumerFuture.isDone());
+            isDoneBeforePoisonPill = consumerFuture.isDone();
             queue.put("\0");
             Thread.sleep(100);
-            Assertions.assertTrue(consumerFuture.isDone());
+            isDoneAfterPoisonPill = consumerFuture.isDone();
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
+
+        Assertions.assertFalse(isDoneBeforePoisonPill);
+        Assertions.assertTrue(isDoneAfterPoisonPill);
     }
 
     @Test
