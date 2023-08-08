@@ -60,7 +60,7 @@ class ProducerConsumerTests {
         Assertions.assertTrue(consumer.getDictionary().isEmpty());
     }
 
-    @Test
+    @RepeatedTest(20)
     @DisplayName("Consumer doesn't have dictionary inconsistency with high load")
     void consumerHaveConsistentDictionaryWithHighLoadTest() {
         Consumer consumer = new Consumer(queue);
