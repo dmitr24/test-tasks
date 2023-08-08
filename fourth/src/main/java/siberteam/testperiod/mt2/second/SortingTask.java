@@ -9,8 +9,7 @@ import siberteam.testperiod.mt2.second.sorter.Sorter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
+import java.util.concurrent.*;
 
 public class SortingTask {
     private static final SorterFactory sorterFactory = new SorterFactory();
@@ -59,18 +58,26 @@ public class SortingTask {
     }
 
     private static void executeMultithreading(UserRequest userRequest, List<String> dictionary) {
-        ExecutorService executorService =
-                Executors.newFixedThreadPool(userRequest.getParallelExecutions());
+        ForkJoinPool forkJoinPool = new ForkJoinPool(userRequest.getParallelExecutions());
         Set<Sorter> allSorters = sorterFactory.getAllInstances();
+        List<Future> tasks = new ArrayList<>();
         for (Sorter sorter : allSorters) {
-            executorService.submit(() -> {
+            tasks.add(forkJoinPool.submit(() -> {
                 System.out.println(Thread.currentThread().getName() + " " + sorter.getClass().getSimpleName());
                 List<String> dictionaryCopy = new ArrayList<>(dictionary);
                 List<String> sortedWords = sorter.sort(dictionaryCopy);
                 FileWriter writer = new FileWriter(userRequest.getOutputDir());
                 writer.write(sorter.getClass().getSimpleName(), String.join("\n", sortedWords));
-            });
+            }));
         }
-        executorService.shutdown();
+        tasks.forEach(task -> {
+            try {
+                task.get();
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            } catch (ExecutionException e) {
+                throw new RuntimeException(e);
+            }
+        });
     }
 }
