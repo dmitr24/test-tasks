@@ -2,13 +2,13 @@ package siberteam.testperiod.mt2.third;
 
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.LinkedTransferQueue;
+import java.util.concurrent.TransferQueue;
 
 public class Consumer {
     private final Set<String> dictionary = ConcurrentHashMap.newKeySet();
-    private final LinkedTransferQueue<String> queue;
+    private final TransferQueue<String> queue;
 
-    public Consumer(LinkedTransferQueue<String> queue) {
+    public Consumer(TransferQueue<String> queue) {
         this.queue = queue;
     }
 

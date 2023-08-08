@@ -9,6 +9,7 @@ import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.LinkedTransferQueue;
+import java.util.concurrent.TransferQueue;
 
 public class DictionaryTask {
     private static Locations locations;
@@ -20,7 +21,7 @@ public class DictionaryTask {
     }
 
     private static void createDictionary(Set<String> urls) throws ExecutionException, InterruptedException {
-        LinkedTransferQueue<String> queue = new LinkedTransferQueue<>();
+        TransferQueue<String> queue = new LinkedTransferQueue<>();
         CompletableFuture<Consumer> consumerFuture = startConsumer(queue);
         CompletableFuture<Void>[] producers = createProducers(urls, queue);
         completeProducing(producers, queue);
@@ -32,13 +33,13 @@ public class DictionaryTask {
     }
 
     private static void completeProducing(CompletableFuture<Void>[] producers,
-                                          LinkedTransferQueue<String> queue) throws ExecutionException, InterruptedException {
+                                          TransferQueue<String> queue) throws ExecutionException, InterruptedException {
         CompletableFuture.allOf(producers).get();
         queue.put("\0");
     }
 
     private static CompletableFuture<Void>[] createProducers(Set<String> urls,
-                                                             LinkedTransferQueue<String> queue) {
+                                                             TransferQueue<String> queue) {
         CompletableFuture<Void>[] producers = new CompletableFuture[urls.size()];
         int i = 0;
         for (String url : urls) {
@@ -52,7 +53,7 @@ public class DictionaryTask {
         return producers;
     }
 
-    private static CompletableFuture<Consumer> startConsumer( LinkedTransferQueue<String> queue) {
+    private static CompletableFuture<Consumer> startConsumer(TransferQueue<String> queue) {
         return CompletableFuture.supplyAsync(() -> {
             Consumer consumer = new Consumer(queue);
             consumer.consume();

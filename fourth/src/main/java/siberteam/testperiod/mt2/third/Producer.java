@@ -2,13 +2,13 @@ package siberteam.testperiod.mt2.third;
 
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.util.concurrent.LinkedTransferQueue;
+import java.util.concurrent.TransferQueue;
 
 public class Producer {
-    private final LinkedTransferQueue<String> queue;
+    private final TransferQueue<String> queue;
     private final String path;
 
-    public Producer(String path, LinkedTransferQueue<String> queue) {
+    public Producer(String path, TransferQueue<String> queue) {
         this.path = path;
         this.queue = queue;
     }
