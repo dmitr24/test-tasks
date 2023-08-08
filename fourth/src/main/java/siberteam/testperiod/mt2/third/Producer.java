@@ -2,13 +2,13 @@ package siberteam.testperiod.mt2.third;
 
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.util.concurrent.TransferQueue;
+import java.util.concurrent.BlockingQueue;
 
 public class Producer {
-    private final TransferQueue<String> queue;
+    private final BlockingQueue<String> queue;
     private final String path;
 
-    public Producer(String path, TransferQueue<String> queue) {
+    public Producer(String path, BlockingQueue<String> queue) {
         this.path = path;
         this.queue = queue;
     }
@@ -24,14 +24,14 @@ public class Producer {
                 } else {
                     if (wordBuilder.length() >= 3) {
                         String word = wordBuilder.toString();
-                        queue.transfer(word);
+                        queue.put(word);
                     }
                     wordBuilder = new StringBuilder();
                 }
                 newChar =  reader.read();
             }
             if (wordBuilder.length() >= 3) {
-                queue.transfer(wordBuilder.toString());
+                queue.put(wordBuilder.toString());
             }
         } catch (IOException e) {
             throw new RuntimeException("Exception while reading from file: " + path);

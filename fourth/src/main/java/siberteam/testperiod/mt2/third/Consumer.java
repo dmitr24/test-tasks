@@ -1,14 +1,14 @@
 package siberteam.testperiod.mt2.third;
 
 import java.util.Set;
+import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.TransferQueue;
 
 public class Consumer {
     private final Set<String> dictionary = ConcurrentHashMap.newKeySet();
-    private final TransferQueue<String> queue;
+    private final BlockingQueue<String> queue;
 
-    public Consumer(TransferQueue<String> queue) {
+    public Consumer(BlockingQueue<String> queue) {
         this.queue = queue;
     }
 

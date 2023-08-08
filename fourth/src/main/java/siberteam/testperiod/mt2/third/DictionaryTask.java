@@ -6,10 +6,10 @@ import siberteam.testperiod.mt2.third.io.FileReader;
 import siberteam.testperiod.mt2.third.io.FileWriter;
 import siberteam.testperiod.mt2.third.sorter.AlphabetSorter;
 import java.util.*;
+import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
-import java.util.concurrent.LinkedTransferQueue;
-import java.util.concurrent.TransferQueue;
 
 public class DictionaryTask {
     private static Locations locations;
@@ -21,7 +21,7 @@ public class DictionaryTask {
     }
 
     private static void createDictionary(Set<String> urls) throws ExecutionException, InterruptedException {
-        TransferQueue<String> queue = new LinkedTransferQueue<>();
+        BlockingQueue<String> queue = new ArrayBlockingQueue<>(100000);
         CompletableFuture<Consumer> consumerFuture = startConsumer(queue);
         CompletableFuture<Void>[] producers = createProducers(urls, queue);
         completeProducing(producers, queue);
@@ -33,13 +33,13 @@ public class DictionaryTask {
     }
 
     private static void completeProducing(CompletableFuture<Void>[] producers,
-                                          TransferQueue<String> queue) throws ExecutionException, InterruptedException {
+                                          BlockingQueue<String> queue) throws ExecutionException, InterruptedException {
         CompletableFuture.allOf(producers).get();
         queue.put("\0");
     }
 
     private static CompletableFuture<Void>[] createProducers(Set<String> urls,
-                                                             TransferQueue<String> queue) {
+                                                             BlockingQueue<String> queue) {
         CompletableFuture<Void>[] producers = new CompletableFuture[urls.size()];
         int i = 0;
         for (String url : urls) {
@@ -53,7 +53,7 @@ public class DictionaryTask {
         return producers;
     }
 
-    private static CompletableFuture<Consumer> startConsumer(TransferQueue<String> queue) {
+    private static CompletableFuture<Consumer> startConsumer(BlockingQueue<String> queue) {
         return CompletableFuture.supplyAsync(() -> {
             Consumer consumer = new Consumer(queue);
             consumer.consume();
