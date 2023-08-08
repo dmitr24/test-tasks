@@ -28,10 +28,10 @@ class ProducerConsumerTests {
     void consumerWaitsForSignalTest() {
         Consumer consumer = new Consumer(queue);
         ExecutorService executorService = Executors.newSingleThreadExecutor();
-
-        Future consumerFuture = executorService.submit(consumer::consume);
         boolean isDoneBeforePoisonPill = false;
         boolean isDoneAfterPoisonPill = false;
+
+        Future consumerFuture = executorService.submit(consumer::consume);
         try {
             Thread.sleep(100);
             isDoneBeforePoisonPill = consumerFuture.isDone();
