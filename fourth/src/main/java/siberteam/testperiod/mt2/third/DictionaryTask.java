@@ -25,15 +25,14 @@ public class DictionaryTask {
         int i = 0;
         for (String url : urls) {
             dictionaries[i] = CompletableFuture.supplyAsync(() -> {
-                Set<String> newWords = getRussianWords(url);
-                words.addAll(newWords);
+                addNewWords(url, words);
                 return null;
             });
             i++;
         }
         CompletableFuture
                 .allOf(dictionaries)
-                .thenApply((nth) -> sortDictionary(words))
+                .thenApply(nth -> sortDictionary(words))
                 .thenAccept(DictionaryTask::write)
                 .get();
     }
@@ -54,9 +53,9 @@ public class DictionaryTask {
         return reader.getDistinctWords();
     }
 
-    private static Set<String> getRussianWords(String fileName) {
+    private static void addNewWords(String fileName, Set<String> dictionary) {
         FileReader fileReader = new FileReader(fileName);
-        return fileReader.getDistinctRussianWords();
+        fileReader.writeRussianWordsToDictionary(dictionary);
     }
 
     private static Locations getLocations(String[] args) {

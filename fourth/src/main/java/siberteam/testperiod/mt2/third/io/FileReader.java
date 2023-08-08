@@ -43,9 +43,8 @@ public class FileReader {
         }
     }
 
-    public Set<String> getDistinctRussianWords() {
+    public void writeRussianWordsToDictionary(Set<String> dictionary) {
         try (BufferedReader reader = new BufferedReader(new java.io.FileReader(path))) {
-            Set<String> words = new HashSet<>();
             int newChar = reader.read();
             StringBuilder wordBuilder = new StringBuilder();
             while (newChar != -1) {
@@ -55,16 +54,15 @@ public class FileReader {
                 } else {
                     if (wordBuilder.length() >= 3) {
                         String word = wordBuilder.toString();
-                        words.add(word);
+                        dictionary.add(word);
                     }
                     wordBuilder = new StringBuilder();
                 }
                 newChar =  reader.read();
             }
             if (wordBuilder.length() >= 3) {
-                words.add(wordBuilder.toString());
+                dictionary.add(wordBuilder.toString());
             }
-            return words;
         } catch (IOException e) {
             throw new RuntimeException("Exception while reading from file: " + path);
         }
