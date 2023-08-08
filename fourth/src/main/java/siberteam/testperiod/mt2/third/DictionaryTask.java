@@ -21,7 +21,7 @@ public class DictionaryTask {
     }
 
     private static void createDictionary(Set<String> urls) throws ExecutionException, InterruptedException {
-        BlockingQueue<String> queue = new ArrayBlockingQueue<>(100000);
+        BlockingQueue<String> queue = new ArrayBlockingQueue<>(10000);
         CompletableFuture<Consumer> consumerFuture = startConsumer(queue);
         CompletableFuture<Void>[] producers = createProducers(urls, queue);
         completeProducing(producers, queue);
