@@ -21,7 +21,7 @@ public class Producer {
                 if (newChar != '\n' && newChar != ' ') {
                     wordBuilder.append((char) newChar);
                 } else {
-                    if (wordBuilder.length() >= 2) {
+                    if (wordBuilder.length() > 2) {
                         String word = wordBuilder.toString();
                         queue.put(word);
                     }
@@ -29,7 +29,7 @@ public class Producer {
                 }
                 newChar =  reader.read();
             }
-            if (wordBuilder.length() >= 2) {
+            if (wordBuilder.length() > 2) {
                 queue.put(wordBuilder.toString());
             }
         } catch (IOException e) {
