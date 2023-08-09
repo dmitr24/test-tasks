@@ -28,8 +28,8 @@ class ProducerConsumerTests {
     void consumerWaitsForSignalTest() {
         Consumer consumer = new Consumer(queue);
         ExecutorService executorService = Executors.newSingleThreadExecutor();
-        boolean isDoneBeforePoisonPill = false;
-        boolean isDoneAfterPoisonPill = false;
+        boolean isDoneBeforePoisonPill;
+        boolean isDoneAfterPoisonPill;
 
         Future consumerFuture = executorService.submit(consumer::consume);
         try {
@@ -70,21 +70,19 @@ class ProducerConsumerTests {
         ExecutorService consumerExecutor = Executors.newSingleThreadExecutor();
         Future consumerAwaiter = consumerExecutor.submit(consumer::consume);
         ExecutorService producerExecutor = Executors.newCachedThreadPool();
-        List<Future> producersAwaiters = new ArrayList<>();
+        List<Future> producersWaiters = new ArrayList<>();
         for (ProducerStub producer : producers) {
-            producersAwaiters.add(producerExecutor.submit(producer::produce));
+            producersWaiters.add(producerExecutor.submit(producer::produce));
         }
         Set<String> predictedResult = new HashSet<>();
         for (int i = 0; i < 10_000; i++) {
             predictedResult.add("test " + i);
         }
 
-        producersAwaiters.forEach(producersAwaiter -> {
+        producersWaiters.forEach(producersAwaiter -> {
             try {
                 producersAwaiter.get();
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-            } catch (ExecutionException e) {
+            } catch (InterruptedException | ExecutionException e) {
                 throw new RuntimeException(e);
             }
         });
