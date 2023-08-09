@@ -96,7 +96,6 @@ class ProducerConsumerTests {
         }
         Set<String> result = consumer.getDictionary();
 
-        Assertions.assertTrue(result.containsAll(predictedResult));
-        Assertions.assertTrue(predictedResult.containsAll(result));
+        Assertions.assertEquals(predictedResult, result);
     }
 }
