@@ -18,11 +18,10 @@ public class Producer {
             int newChar = reader.read();
             StringBuilder wordBuilder = new StringBuilder();
             while (newChar != -1) {
-                if ((newChar >= 'а' && newChar <= 'я') ||
-                        (newChar >= 'А' && newChar <= 'Я')) {
+                if (newChar != '\n' && newChar != ' ') {
                     wordBuilder.append((char) newChar);
                 } else {
-                    if (wordBuilder.length() >= 3) {
+                    if (wordBuilder.length() >= 2) {
                         String word = wordBuilder.toString();
                         queue.put(word);
                     }
@@ -30,7 +29,7 @@ public class Producer {
                 }
                 newChar =  reader.read();
             }
-            if (wordBuilder.length() >= 3) {
+            if (wordBuilder.length() >= 2) {
                 queue.put(wordBuilder.toString());
             }
         } catch (IOException e) {

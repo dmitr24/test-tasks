@@ -23,10 +23,10 @@ public class FileReader {
             int newChar = reader.read();
             StringBuilder wordBuilder = new StringBuilder();
             while (newChar != -1) {
-                if (newChar != '\n' && newChar != ' ') {
+                if (newChar != '\n' && newChar != ' ' && newChar != ',') {
                     wordBuilder.append((char) newChar);
                 } else {
-                    if (wordBuilder.length() >= 0) {
+                    if (wordBuilder.length() >= 1) {
                         String word = wordBuilder.toString();
                         words.add(word);
                     }

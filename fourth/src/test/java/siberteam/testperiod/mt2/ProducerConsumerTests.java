@@ -1,99 +1,46 @@
 package siberteam.testperiod.mt2;
 
 import org.junit.jupiter.api.*;
-import siberteam.testperiod.mt2.stub.ProducerStub;
-import siberteam.testperiod.mt2.third.Consumer;
-import java.util.ArrayList;
+import siberteam.testperiod.mt2.third.DictionaryTask;
+import siberteam.testperiod.mt2.third.io.FileReader;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.concurrent.*;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class ProducerConsumerTests {
-    private ProducerStub[] producers;
-    private ArrayBlockingQueue<String> queue;
+    private final ClassLoader classLoader = getClass().getClassLoader();
+    private Method createDictionaryMethod;
+    private Method actualSorterMethod;
 
     @BeforeAll
-    void loadProducers() {
-        queue = new ArrayBlockingQueue<>(10000);
-        producers = new ProducerStub[10];
-        for (int i = 0; i < 10; i++) {
-            producers[i] = new ProducerStub((i + 1) * 1000, queue);
-        }
-    }
-
-    @Test
-    @DisplayName("Consumer wait for poison pill")
-    void consumerWaitsForSignalTest() {
-        Consumer consumer = new Consumer(queue);
-        ExecutorService executorService = Executors.newSingleThreadExecutor();
-        boolean isDoneBeforePoisonPill;
-        boolean isDoneAfterPoisonPill;
-
-        Future consumerFuture = executorService.submit(consumer::consume);
-        try {
-            Thread.sleep(100);
-            isDoneBeforePoisonPill = consumerFuture.isDone();
-            queue.put("\0");
-            Thread.sleep(100);
-            isDoneAfterPoisonPill = consumerFuture.isDone();
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
-
-        Assertions.assertFalse(isDoneBeforePoisonPill);
-        Assertions.assertTrue(isDoneAfterPoisonPill);
-    }
-
-    @Test
-    @DisplayName("Consumer doesn't write poison pill to dictionary")
-    void consumerDontWriteEmptyWordToDictionaryTest() {
-        Consumer consumer = new Consumer(queue);
-        ExecutorService executorService = Executors.newSingleThreadExecutor();
-
-        executorService.submit(consumer::consume);
-        try {
-            queue.put("\0");
-            Thread.sleep(150);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
-
-        Assertions.assertTrue(consumer.getDictionary().isEmpty());
+    void loadProducers() throws NoSuchMethodException {
+        createDictionaryMethod = DictionaryTask.class.getDeclaredMethod("createDictionary", Set.class);
+        createDictionaryMethod.setAccessible(true);
+        actualSorterMethod = DictionaryTask.class.getDeclaredMethod("sortDictionary", Set.class);
+        actualSorterMethod.setAccessible(true);
     }
 
     @RepeatedTest(20)
     @DisplayName("Consumer doesn't have dictionary inconsistency with high load")
-    void consumerHaveConsistentDictionaryWithHighLoadTest() {
-        Consumer consumer = new Consumer(queue);
-        ExecutorService consumerExecutor = Executors.newSingleThreadExecutor();
-        Future consumerAwaiter = consumerExecutor.submit(consumer::consume);
-        ExecutorService producerExecutor = Executors.newCachedThreadPool();
-        List<Future> producersWaiters = new ArrayList<>();
-        for (ProducerStub producer : producers) {
-            producersWaiters.add(producerExecutor.submit(producer::produce));
-        }
-        Set<String> predictedResult = new HashSet<>();
-        for (int i = 0; i < 10_000; i++) {
-            predictedResult.add("test " + i);
-        }
+    void consumerHaveConsistentDictionaryWithHighLoadTest() throws InvocationTargetException, IllegalAccessException {
+        Set<String> urls = new HashSet<>();
+        urls.add(classLoader.getResource("third/test-1-big.txt").getPath());
+        urls.add(classLoader.getResource("third/test-2-big.txt").getPath());
+        urls.add(classLoader.getResource("third/test-3-big.txt").getPath());
+        List<String> perfectDictionary =
+                getPerfectDictionary(classLoader.getResource("third/perfect-output-big.txt").getPath());
 
-        producersWaiters.forEach(producersAwaiter -> {
-            try {
-                producersAwaiter.get();
-            } catch (InterruptedException | ExecutionException e) {
-                throw new RuntimeException(e);
-            }
-        });
-        try {
-            queue.put("\0");
-            consumerAwaiter.get();
-        } catch (InterruptedException | ExecutionException e) {
-            throw new RuntimeException(e);
-        }
-        Set<String> result = consumer.getDictionary();
+        List<String> result = (List<String>) createDictionaryMethod.invoke(null, urls);
 
-        Assertions.assertEquals(predictedResult, result);
+        Assertions.assertEquals(perfectDictionary, result);
+    }
+
+    private List<String> getPerfectDictionary(String path) throws InvocationTargetException, IllegalAccessException {
+        FileReader fileReader = new FileReader(path);
+        Set<String> words = fileReader.getDistinctWords();
+        return (List<String>) actualSorterMethod.invoke(null, words);
     }
 }

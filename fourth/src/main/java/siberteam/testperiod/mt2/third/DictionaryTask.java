@@ -17,18 +17,18 @@ public class DictionaryTask {
     public static void main(String[] args) throws ExecutionException, InterruptedException {
         locations = getLocations(args);
         Set<String> urls = getUrls(locations.getInputFileLocation());
-        createDictionary(urls);
+        List<String> dictionary = createDictionary(urls);
+        write(dictionary);
     }
 
-    private static void createDictionary(Set<String> urls) throws ExecutionException, InterruptedException {
+    private static List<String> createDictionary(Set<String> urls) throws ExecutionException, InterruptedException {
         BlockingQueue<String> queue = new ArrayBlockingQueue<>(10000);
         CompletableFuture<Consumer> consumerFuture = startConsumer(queue);
         CompletableFuture<Void>[] producers = createProducers(urls, queue);
         completeProducing(producers, queue);
-        consumerFuture
+        return consumerFuture
                 .thenApply(Consumer::getDictionary)
                 .thenApplyAsync(DictionaryTask::sortDictionary)
-                .thenAcceptAsync(DictionaryTask::write)
                 .get();
     }
 
