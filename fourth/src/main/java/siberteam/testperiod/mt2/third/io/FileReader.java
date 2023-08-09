@@ -34,7 +34,7 @@ public class FileReader {
                 }
                 newChar =  reader.read();
             }
-            if (wordBuilder.length() >= 0) {
+            if (wordBuilder.length() >= 1) {
                 words.add(wordBuilder.toString());
             }
             return words;
