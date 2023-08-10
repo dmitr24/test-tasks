@@ -36,6 +36,6 @@ class ProducerConsumerTests {
         FileReader outputFileReader =
                 new FileReader(classLoader.getResource("third/output.txt").getPath());
         List<String> outputDictionary = outputFileReader.getNaturalOrderedWords();
-        Assertions.assertEquals(outputDictionary, perfectDictionary);
+        Assertions.assertEquals(perfectDictionary, outputDictionary);
     }
 }
