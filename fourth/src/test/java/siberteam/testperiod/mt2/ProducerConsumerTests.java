@@ -3,12 +3,25 @@ package siberteam.testperiod.mt2;
 import org.junit.jupiter.api.*;
 import siberteam.testperiod.mt2.third.DictionaryTask;
 import siberteam.testperiod.mt2.third.io.FileReader;
+
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class ProducerConsumerTests {
     private final ClassLoader classLoader = getClass().getClassLoader();
+
+    @AfterAll
+    void deleteOutputFile() throws IOException {
+        Path path = Paths.get(classLoader.getResource("third/output.txt").getPath());
+        if (Files.exists(path)) {
+            Files.delete(path);
+        }
+    }
 
     @RepeatedTest(20)
     @DisplayName("Consumer doesn't have dictionary inconsistency with high load")
