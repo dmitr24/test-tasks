@@ -3,8 +3,7 @@ package siberteam.testperiod.mt2.third.io;
 import siberteam.testperiod.mt2.third.validator.FileValidator;
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 public class FileReader {
     private final String path;
@@ -18,8 +17,19 @@ public class FileReader {
     }
 
     public Set<String> getDistinctWords() {
+        Set<String> words = new HashSet<>();
+        writeToSet(words);
+        return words;
+    }
+
+    public List<String> getNaturalOrderedWords() {
+        List<String> words = new ArrayList<>();
+        writeToSet(words);
+        return words;
+    }
+
+    private void writeToSet(Collection<String> words) {
         try (BufferedReader reader = new BufferedReader(new java.io.FileReader(path))) {
-            Set<String> words = new HashSet<>();
             int newChar = reader.read();
             StringBuilder wordBuilder = new StringBuilder();
             while (newChar != -1) {
@@ -37,7 +47,6 @@ public class FileReader {
             if (wordBuilder.length() >= 1) {
                 words.add(wordBuilder.toString());
             }
-            return words;
         } catch (IOException e) {
             throw new RuntimeException("Exception while reading from file: " + path);
         }

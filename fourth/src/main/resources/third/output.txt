@@ -2,7 +2,6 @@ aaa
 aaaa
 alabama
 alaska
-bb
 brief
 ccaccccc
 ccsccc
