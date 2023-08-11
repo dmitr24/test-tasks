@@ -18,22 +18,22 @@ public class FileReader {
 
     public Set<String> getDistinctWords() {
         Set<String> words = new HashSet<>();
-        writeToSet(words);
+        writeToCollection(words);
         return words;
     }
 
     public List<String> getNaturalOrderedWords() {
         List<String> words = new ArrayList<>();
-        writeToSet(words);
+        writeToCollection(words);
         return words;
     }
 
-    private void writeToSet(Collection<String> words) {
+    private void writeToCollection(Collection<String> words) {
         try (BufferedReader reader = new BufferedReader(new java.io.FileReader(path))) {
             int newChar = reader.read();
             StringBuilder wordBuilder = new StringBuilder();
             while (newChar != -1) {
-                if (newChar != '\n' && newChar != ' ' && newChar != ',') {
+                if (!Character.isSpaceChar(newChar) && !Character.isWhitespace(newChar) && newChar != ',') {
                     wordBuilder.append((char) newChar);
                 } else {
                     if (wordBuilder.length() >= 1) {

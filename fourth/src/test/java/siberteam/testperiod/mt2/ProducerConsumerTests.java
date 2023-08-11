@@ -3,7 +3,6 @@ package siberteam.testperiod.mt2;
 import org.junit.jupiter.api.*;
 import siberteam.testperiod.mt2.third.DictionaryTask;
 import siberteam.testperiod.mt2.third.io.FileReader;
-
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
