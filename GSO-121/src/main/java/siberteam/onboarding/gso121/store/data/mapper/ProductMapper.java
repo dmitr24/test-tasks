@@ -1,11 +1,11 @@
 package siberteam.onboarding.gso121.store.data.mapper;
 
-import siberteam.onboarding.gso121.store.data.dto.CreateProductDto;
+import siberteam.onboarding.gso121.store.data.dto.CreateUpdateProductDto;
 import siberteam.onboarding.gso121.store.data.dto.ProductDto;
 import siberteam.onboarding.gso121.store.domain.ProductEntity;
 
 public class ProductMapper {
-    public ProductEntity toEntity(CreateProductDto dto) {
+    public ProductEntity toEntity(CreateUpdateProductDto dto) {
         ProductEntity entity = new ProductEntity();
         entity.setName(dto.getName());
         entity.setPrice(dto.getPrice());

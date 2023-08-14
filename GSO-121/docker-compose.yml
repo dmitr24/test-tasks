@@ -7,11 +7,11 @@ services:
     environment:
       POSTGRES_USER: store_dev
       POSTGRES_PASSWORD: store_dev
-      POSTGERS_DB: store_db
+      POSTGRES_DB: store_db
     ports:
-      - "5555:5432"
+      - "5432:5432"
     volumes:
-      - postgres:data/postgres
+      - ./initdb.sql:/docker-entrypoint-initdb.d/initdb.sql
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U store_dev -d store_db"]
       interval: 10s
