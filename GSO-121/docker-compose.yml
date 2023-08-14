@@ -1,0 +1,23 @@
+version: '3.1'
+
+services:
+  database:
+    container_name: store_db
+    image: postgres
+    environment:
+      POSTGRES_USER: store_dev
+      POSTGRES_PASSWORD: store_dev
+      POSTGERS_DB: store_db
+    ports:
+      - "5555:5432"
+    volumes:
+      - postgres:data/postgres
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U store_dev -d store_db"]
+      interval: 10s
+      retries: 5
+      timeout: 6s
+    restart: unless-stopped
+
+volumes:
+  postgrs:
