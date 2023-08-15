@@ -8,5 +8,5 @@ import lombok.Setter;
 public class ProductDto {
     private int code;
     private String name;
-    private Integer price;
+    private int price;
 }
