@@ -13,6 +13,8 @@ import java.util.concurrent.BlockingQueue;
 
 public class ProductDao {
     private final BlockingQueue<Connection> connectionPool = new ArrayBlockingQueue<>(10);
+    private final String dbUrl;
+    private final Properties connectionProps;
 
     public ProductDao(String url, Properties connectionProps) {
         try {
@@ -22,6 +24,8 @@ public class ProductDao {
                 newConnection.setAutoCommit(false);
                 connectionPool.put(newConnection);
             }
+            this.dbUrl = url;
+            this.connectionProps = connectionProps;
         } catch (SQLException | InterruptedException e) {
             throw new RuntimeException(e);
         }
@@ -39,95 +43,124 @@ public class ProductDao {
     }
 
     public void create(ProductEntity productEntity) {
+        Connection connection = getConnection();
         try {
-            Connection connection = connectionPool.take();
             connection.setReadOnly(false);
             connection.setTransactionIsolation(Connection.TRANSACTION_READ_UNCOMMITTED);
-            PreparedStatement statement = connection.prepareStatement("INSERT INTO products VALUES (DEFAULT, ?, ?)");
-            statement.setString(1, productEntity.getName());
-            statement.setInt(2, productEntity.getPrice());
-            statement.executeUpdate();
-            statement.close();
+            try (PreparedStatement statement =
+                         connection.prepareStatement("INSERT INTO products VALUES (DEFAULT, ?, ?)")) {
+                statement.setString(1, productEntity.getName());
+                statement.setInt(2, productEntity.getPrice());
+                statement.executeUpdate();
+            }
             connection.commit();
-            connectionPool.put(connection);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
         } catch (SQLException e) {
             throw new RuntimeException(e);
+        } finally {
+            returnConnection(connection);
+        }
+    }
+
+    public ProductEntity getByCode(int code) {
+        Connection connection = getConnection();
+        try {
+            connection.setReadOnly(false);
+            connection.setTransactionIsolation(Connection.TRANSACTION_REPEATABLE_READ);
+            if (!exists(connection, code)) {
+                connection.rollback();
+                throw new ProductNotFoundException("Product with such code not exist - " + code);
+            }
+            ProductEntity productEntity = null;
+            try (PreparedStatement statement =
+                         connection.prepareStatement("SELECT code, name, price FROM products WHERE code = ?")) {
+                statement.setInt(1, code);
+                ResultSet resultSet = statement.executeQuery();;
+                if (resultSet.next()) {
+                    productEntity = new ProductEntity();
+                    productEntity.setCode(resultSet.getInt("code"));
+                    productEntity.setName(resultSet.getString("name"));
+                    productEntity.setPrice(resultSet.getInt("price"));
+                }
+            }
+            connection.commit();
+            return productEntity;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } finally {
+            returnConnection(connection);
         }
     }
 
     public Collection<ProductEntity> getAll() {
+        Connection connection = getConnection();
         try {
-            Connection connection = connectionPool.take();
             connection.setReadOnly(true);
             connection.setTransactionIsolation(Connection.TRANSACTION_READ_COMMITTED);
-            PreparedStatement statement = connection.prepareStatement("SELECT code, name, price FROM products");
-            ResultSet resultSet = statement.executeQuery();
-            Collection<ProductEntity> productEntities = new ArrayList<>();
-            while (resultSet.next()) {
-                ProductEntity productEntity = new ProductEntity();
-                productEntity.setCode(resultSet.getInt("code"));
-                productEntity.setName(resultSet.getString("name"));
-                productEntity.setPrice(resultSet.getInt("price"));
-                productEntities.add(productEntity);
+            Collection<ProductEntity> productEntities;
+            try (PreparedStatement statement =
+                         connection.prepareStatement("SELECT code, name, price FROM products")) {
+                productEntities = new ArrayList<>();
+                ResultSet resultSet = statement.executeQuery();;
+                while (resultSet.next()) {
+                    ProductEntity productEntity = new ProductEntity();
+                    productEntity.setCode(resultSet.getInt("code"));
+                    productEntity.setName(resultSet.getString("name"));
+                    productEntity.setPrice(resultSet.getInt("price"));
+                    productEntities.add(productEntity);
+                }
             }
-            statement.close();
             connection.commit();
-            connectionPool.put(connection);
             return productEntities;
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
         } catch (SQLException e) {
             throw new RuntimeException(e);
+        } finally {
+            returnConnection(connection);
         }
     }
 
     public void update(int code, ProductEntity productEntity) {
+        Connection connection = getConnection();
         try {
-            Connection connection = connectionPool.take();
             connection.setReadOnly(false);
             connection.setTransactionIsolation(Connection.TRANSACTION_REPEATABLE_READ);
             if (!exists(connection, code)) {
                 connection.rollback();
                 throw new ProductNotFoundException("Product with such code not exist - " + code);
             }
-            PreparedStatement statement =
-                    connection.prepareStatement("UPDATE products SET name = ?, price = ? WHERE  code = ?");
-            statement.setString(1, productEntity.getName());
-            statement.setInt(2, productEntity.getPrice());
-            statement.setInt(3, code);
-            statement.executeUpdate();
-            statement.close();
+            try (PreparedStatement statement =
+                    connection.prepareStatement("UPDATE products SET name = ?, price = ? WHERE  code = ?")) {
+                statement.setString(1, productEntity.getName());
+                statement.setInt(2, productEntity.getPrice());
+                statement.setInt(3, code);
+                statement.executeUpdate();
+            }
             connection.commit();
-            connectionPool.put(connection);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
         } catch (SQLException e) {
             throw new RuntimeException(e);
+        } finally {
+            returnConnection(connection);
         }
     }
 
-    public void delete(Integer code) {
+    public void delete(int code) {
+        Connection connection = getConnection();
         try {
-            Connection connection = connectionPool.take();
             connection.setReadOnly(false);
             connection.setTransactionIsolation(Connection.TRANSACTION_REPEATABLE_READ);
             if (!exists(connection, code)) {
                 connection.rollback();
                 throw new ProductNotFoundException("Product with such code not exist - " + code);
             }
-            PreparedStatement statement =
-                    connection.prepareStatement("DELETE FROM products WHERE code = ?");
-            statement.setInt(1, code);
-            statement.executeUpdate();
-            statement.close();
+            try (PreparedStatement statement =
+                    connection.prepareStatement("DELETE FROM products WHERE code = ?")) {
+                statement.setInt(1, code);
+                statement.executeUpdate();
+            }
             connection.commit();
-            connectionPool.put(connection);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
         } catch (SQLException e) {
             throw new RuntimeException(e);
+        } finally {
+            returnConnection(connection);
         }
     }
 
@@ -135,6 +168,28 @@ public class ProductDao {
         try (PreparedStatement statement = connection.prepareStatement("SELECT 1 FROM products WHERE code = ?");) {
             statement.setInt(1, code);
             return statement.executeQuery().next();
+        }
+    }
+
+    private Connection getConnection() {
+        try {
+            Connection connection = connectionPool.take();
+            if (!connection.isValid(10)) {
+                Connection newConnection = DriverManager.getConnection(dbUrl, connectionProps);
+                newConnection.setAutoCommit(false);
+                return newConnection;
+            }
+            return connection;
+        } catch (InterruptedException | SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private void returnConnection(Connection connection) {
+        try {
+            connectionPool.put(connection);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
         }
     }
 }

@@ -14,10 +14,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.Collection;
 import java.util.Properties;
 
-@WebServlet(name = "productServlet", value = "/products")
+@WebServlet(name = "productServlet", value = "/product", loadOnStartup = 1)
 public class ProductServlet extends HttpServlet {
     private ProductRequestValidator validator;
     private ProductService productService;
@@ -34,14 +33,24 @@ public class ProductServlet extends HttpServlet {
         productService = new ProductService(productDao, productMapper);
         mapper = new ObjectMapper();
         validator = new ProductRequestValidator();
+        getServletContext().setAttribute("productService", productService);
+        getServletContext().setAttribute("objectMapper", mapper);
     }
 
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
         try {
+            validator.validateCodeParam(request);
             response.setContentType("application/json");
-            Collection<ProductDto> products = productService.getAll();
-            mapper.writeValue(response.getWriter(), products);
+            int code = Integer.parseInt(request.getParameter("code"));
+            ProductDto product = productService.getByCode(code);
+            mapper.writeValue(response.getWriter(), product);
+        } catch (ValidationException exception) {
+            response.getWriter().println(exception.getMessage());
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+        }  catch (ProductNotFoundException exception) {
+            response.getWriter().println(exception.getMessage());
+            response.setStatus(HttpServletResponse.SC_NOT_FOUND);
         } catch (Exception exception) {
             response.getWriter().println("internal server error");
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
@@ -74,7 +83,7 @@ public class ProductServlet extends HttpServlet {
         try {
             validator.validateCodeParam(request);
             response.setContentType("application/json");
-            Integer code = Integer.valueOf(request.getParameter("code"));
+            int code = Integer.parseInt(request.getParameter("code"));
             CreateUpdateProductDto createUpdateProductDto =
                     mapper.readValue(request.getReader(), CreateUpdateProductDto.class);
             validator.validateDto(createUpdateProductDto);
@@ -99,7 +108,7 @@ public class ProductServlet extends HttpServlet {
         try {
             validator.validateCodeParam(request);
             response.setContentType("application/json");
-            Integer code = Integer.valueOf(request.getParameter("code"));
+            int code = Integer.parseInt(request.getParameter("code"));
             productService.delete(code);
         } catch (ValidationException exception) {
             response.getWriter().println(exception.getMessage());

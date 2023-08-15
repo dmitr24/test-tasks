@@ -19,6 +19,11 @@ public class ProductService {
         productDao.create(productEntity);
     }
 
+    public ProductDto getByCode(int code) {
+        ProductEntity productEntity = productDao.getByCode(code);
+        return productMapper.toDto(productEntity);
+    }
+
     public Collection<ProductDto> getAll() {
         return productDao
                 .getAll()
@@ -27,12 +32,12 @@ public class ProductService {
                 .collect(Collectors.toList());
     }
 
-    public void update(Integer code, CreateUpdateProductDto updateProductDto) {
+    public void update(int code, CreateUpdateProductDto updateProductDto) {
         ProductEntity productEntity = productMapper.toEntity(updateProductDto);
         productDao.update(code, productEntity);
     }
 
-    public void delete(Integer code) {
+    public void delete(int code) {
         productDao.delete(code);
     }
 }
