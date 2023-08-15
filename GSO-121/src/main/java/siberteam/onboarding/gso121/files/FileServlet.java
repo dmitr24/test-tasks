@@ -1,5 +1,6 @@
 package siberteam.onboarding.gso121.files;
 
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
@@ -36,21 +37,26 @@ public class FileServlet extends HttpServlet {
 
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        RequestDispatcher requestDispatcher = request.getRequestDispatcher("result.jsp");
         Part filePart = request.getPart("file");
         if (filePart == null) {
-            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "File is required for submission");
+            request.setAttribute("result", "File is required for submission");
+            requestDispatcher.forward(request, response);
             return;
         }
         if (filePart.getSize() == 0) {
-            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Empty files not allowed");
+            request.setAttribute("result", "Empty files not allowed");
+            requestDispatcher.forward(request, response);
             return;
         }
         String fileName = filePart.getSubmittedFileName();
         if (Files.exists(Paths.get(UPLOAD_DIR + fileName))) {
-            response.sendError(HttpServletResponse.SC_CONFLICT, "File with such name already exists");
+            request.setAttribute("result", "File with such name already exists");
+            requestDispatcher.forward(request, response);
             return;
         }
         filePart.write(fileName);
-        response.setStatus(201);
+        request.setAttribute("result", "File uploaded successfully");
+        requestDispatcher.forward(request, response);
     }
 }
