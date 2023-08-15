@@ -1,5 +1,5 @@
 CREATE TABLE IF NOT EXISTS products (
     code INT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
     name VARCHAR NOT NULL,
-    price INT CHECK ( price > 0 )
+    price INT CHECK ( price > 0 ) NOT NULL
 )
