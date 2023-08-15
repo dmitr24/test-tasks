@@ -20,11 +20,11 @@ import java.nio.file.Paths;
         fileSizeThreshold = 1024 * 128
 )
 public class FileServlet extends HttpServlet {
-    private final String uploadDir = "/var/tmp/files/";
+    private static final String UPLOAD_DIR = "/var/tmp/files/";
 
     @Override
     public void init() {
-        Path mainDirectoryPath = Paths.get(uploadDir);
+        Path mainDirectoryPath = Paths.get(UPLOAD_DIR);
         if (!Files.exists(mainDirectoryPath)) {
             try {
                 Files.createDirectory(mainDirectoryPath);
@@ -46,7 +46,7 @@ public class FileServlet extends HttpServlet {
             return;
         }
         String fileName = filePart.getSubmittedFileName();
-        if (Files.exists(Paths.get(uploadDir + fileName))) {
+        if (Files.exists(Paths.get(UPLOAD_DIR + fileName))) {
             response.sendError(HttpServletResponse.SC_CONFLICT, "File with such name already exists");
             return;
         }

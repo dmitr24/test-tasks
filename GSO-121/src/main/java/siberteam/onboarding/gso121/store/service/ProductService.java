@@ -29,7 +29,6 @@ public class ProductService {
 
     public void update(Integer code, CreateUpdateProductDto updateProductDto) {
         ProductEntity productEntity = productMapper.toEntity(updateProductDto);
-        productEntity.setCode(code);
         productDao.update(code, productEntity);
     }
 
