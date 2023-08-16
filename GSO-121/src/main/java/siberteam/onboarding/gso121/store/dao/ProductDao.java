@@ -31,7 +31,6 @@ public class ProductDao {
         }
     }
 
-    @PreDestroy
     public void closeConnections() {
         connectionPool.forEach(conn -> {
             try {
