@@ -3,7 +3,6 @@ package siberteam.onboarding.gso121.store.dao;
 import org.postgresql.Driver;
 import siberteam.onboarding.gso121.store.domain.ProductEntity;
 import siberteam.onboarding.gso121.store.exception.ProductNotFoundException;
-import javax.annotation.PreDestroy;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.Collection;
