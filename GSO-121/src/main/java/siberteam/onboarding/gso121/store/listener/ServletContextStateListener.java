@@ -1,4 +1,4 @@
-package siberteam.onboarding.gso121.listener;
+package siberteam.onboarding.gso121.store.listener;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import siberteam.onboarding.gso121.store.dao.ProductDao;
