@@ -113,6 +113,7 @@ public class ProductDao {
             connection.commit();
             return productEntities;
         } catch (SQLException e) {
+            rollback(connection);
             throw new RuntimeException(e);
         } finally {
             returnConnection(connection);
