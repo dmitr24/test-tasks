@@ -2,14 +2,14 @@ version: '3.1'
 
 services:
   database:
-    container_name: store_db
+    container_name: spring_store_db
     image: postgres
     environment:
       POSTGRES_USER: store_dev
       POSTGRES_PASSWORD: store_dev
       POSTGRES_DB: store_db
     ports:
-      - "5432:5432"
+      - "5433:5432"
     volumes:
       - ./initdb.sql:/docker-entrypoint-initdb.d/initdb.sql
     healthcheck:
