@@ -26,7 +26,7 @@ public class TestController {
 
     @GetMapping
     public List<ProductDto> getAll() {
-        return productService.getProducts();
+        return productService.getAll();
     }
 
     @PutMapping("/{code}")

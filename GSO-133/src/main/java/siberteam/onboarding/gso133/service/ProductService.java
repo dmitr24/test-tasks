@@ -19,20 +19,20 @@ public class ProductService {
     private final ProductRepository productRepository;
     private final ProductMapper productMapper;
 
-    @Transactional(readOnly = true, isolation = Isolation.READ_COMMITTED)
-    public List<ProductDto> getProducts() {
-        List<ProductEntity> productEntities = productRepository.findAll();
-        return productEntities
-                .stream()
-                .map(productMapper::toDto)
-                .collect(Collectors.toList());
-    }
-
     @Transactional
     public ProductDto create(CreateUpdateProductDto createUpdateProductDto) {
         ProductEntity productEntity = productMapper.toEntity(createUpdateProductDto);
         productEntity = productRepository.save(productEntity);
         return productMapper.toDto(productEntity);
+    }
+
+    @Transactional(readOnly = true, isolation = Isolation.READ_COMMITTED)
+    public List<ProductDto> getAll() {
+        List<ProductEntity> productEntities = productRepository.findAll();
+        return productEntities
+                .stream()
+                .map(productMapper::toDto)
+                .collect(Collectors.toList());
     }
 
     @Transactional(isolation = Isolation.REPEATABLE_READ)
