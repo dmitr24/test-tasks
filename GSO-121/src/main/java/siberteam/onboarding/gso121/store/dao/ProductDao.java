@@ -55,6 +55,7 @@ public class ProductDao {
             }
             connection.commit();
         } catch (SQLException e) {
+            rollback(connection);
             throw new RuntimeException(e);
         } finally {
             returnConnection(connection);
@@ -85,6 +86,7 @@ public class ProductDao {
             connection.commit();
             return productEntity;
         } catch (SQLException e) {
+            rollback(connection);
             throw new RuntimeException(e);
         } finally {
             returnConnection(connection);
@@ -136,6 +138,7 @@ public class ProductDao {
             }
             connection.commit();
         } catch (SQLException e) {
+            rollback(connection);
             throw new RuntimeException(e);
         } finally {
             returnConnection(connection);
@@ -158,6 +161,7 @@ public class ProductDao {
             }
             connection.commit();
         } catch (SQLException e) {
+            rollback(connection);
             throw new RuntimeException(e);
         } finally {
             returnConnection(connection);
@@ -182,6 +186,14 @@ public class ProductDao {
             return connection;
         } catch (InterruptedException | SQLException e) {
             throw new RuntimeException(e);
+        }
+    }
+
+    private void rollback(Connection connection) {
+        try {
+            connection.rollback();
+        } catch (SQLException ex) {
+            throw new RuntimeException(ex);
         }
     }
 
