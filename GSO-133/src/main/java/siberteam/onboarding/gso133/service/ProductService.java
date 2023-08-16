@@ -45,7 +45,7 @@ public class ProductService {
         return productMapper.toDto(productEntity);
     }
 
-    @Transactional(isolation = Isolation.REPEATABLE_READ)
+    @Transactional(isolation = Isolation.READ_COMMITTED)
     public void delete(int code) {
         ProductEntity productEntity = productRepository
                 .findById(code)

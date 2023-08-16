@@ -149,7 +149,7 @@ public class ProductDao {
         Connection connection = getConnection();
         try {
             connection.setReadOnly(false);
-            connection.setTransactionIsolation(Connection.TRANSACTION_REPEATABLE_READ);
+            connection.setTransactionIsolation(Connection.TRANSACTION_READ_COMMITTED);
             if (!exists(connection, code)) {
                 connection.rollback();
                 throw new ProductNotFoundException("Product with such code not exist - " + code);
