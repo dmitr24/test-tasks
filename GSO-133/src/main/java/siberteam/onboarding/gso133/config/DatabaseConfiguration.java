@@ -1,5 +1,6 @@
 package siberteam.onboarding.gso133.config;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -20,6 +21,7 @@ import java.util.Properties;
 @EnableTransactionManagement
 @EnableJpaRepositories("siberteam.onboarding.gso133.repository")
 @PropertySource("classpath:database.properties")
+@RequiredArgsConstructor
 public class DatabaseConfiguration {
     private final String PROPERTY_DRIVER = "driver";
     private final String PROPERTY_URL = "url";
@@ -27,8 +29,7 @@ public class DatabaseConfiguration {
     private final String PROPERTY_PASSWORD = "password";
     private final String PROPERTY_SHOW_SQL = "hibernate.show_sql";
     private final String PROPERTY_DIALECT = "hibernate.dialect";
-    @Autowired
-    Environment environment;
+    private final Environment environment;
 
     @Bean
     public LocalContainerEntityManagerFactoryBean entityManagerFactory() {
