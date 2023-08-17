@@ -1,6 +1,5 @@
 package siberteam.onboarding.gso134;
 
-import com.sun.org.apache.xalan.internal.xsltc.runtime.ErrorMessages;
 import lombok.Getter;
 import lombok.Setter;
 import org.apache.struts.action.ActionErrors;
@@ -9,7 +8,6 @@ import org.apache.struts.action.ActionMapping;
 import org.apache.struts.action.ActionMessage;
 import javax.servlet.http.HttpServletRequest;
 import java.math.BigDecimal;
-import java.util.Locale;
 
 @Getter
 @Setter
