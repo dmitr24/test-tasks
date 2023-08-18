@@ -18,7 +18,7 @@ public class CalculatorForm extends ActionForm {
     private String operation;
     private BigDecimal secondNumber;
     private BigDecimal result;
-    private final Logger logger = LogManager.getRootLogger();
+    private final transient Logger logger = LogManager.getRootLogger();
 
     @Override
     public ActionErrors validate(ActionMapping mapping, HttpServletRequest request) {
