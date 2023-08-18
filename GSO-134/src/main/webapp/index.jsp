@@ -29,6 +29,8 @@
             <br/>
             <html:errors property="firstNumber" />
             <br/>
+            <html:errors property="operation" />
+            <br/>
             <html:errors property="secondNumber" />
         </html:form>
     </main>

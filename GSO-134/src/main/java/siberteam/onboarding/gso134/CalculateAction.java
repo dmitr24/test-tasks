@@ -8,16 +8,23 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class CalculateAction extends Action {
+    private final Logger logger = LogManager.getRootLogger();
+
     @Override
     public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request,
                                  HttpServletResponse response) {
+        logger.info("calculation start");
         CalculatorForm calculatorForm = (CalculatorForm) form;
         BigDecimal result = calculate(calculatorForm.getFirstNumber(),
                 calculatorForm.getSecondNumber(), calculatorForm.getOperation());
         result = result.setScale(5, RoundingMode.HALF_UP);
         calculatorForm.setResult(result);
+        logger.info("calculation with request {} {} {} ended with result - {}", calculatorForm.getFirstNumber(),
+                calculatorForm.getOperation(), calculatorForm.getSecondNumber(), result);
         return mapping.findForward("success");
     }
 
